@@ -49,7 +49,7 @@ def tokenizacija_recenica(naziv_csv,tekst_komentara):
 
 if __name__ == "__main__":
     url = input("Unesi URL profila doktora: ")
-    naziv_csv = input("Unesi naziv CSV datoteke u koju želis spremiti rečenice.\nBez .csv! Pazi da ne upišeš naziv postojeće CSV datoteke u folderu programa jer će je prebrisati:")
+    naziv_csv = input("Unesi naziv CSV datoteke u koju želis spremiti rečenice.\nBez .csv! Pazi da ne upišeš naziv postojeće CSV datoteke u direktoriju programa jer će je prebrisati:")
     tekst_komentara = skrapiranje_komentara(url)
     tekst_komentara = tokenizacija_recenica(naziv_csv,tekst_komentara)
 
