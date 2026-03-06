@@ -25,7 +25,7 @@ Tijekom izvođenja program:
 4. prikuplja tekst svih komentara sa stranice
 
 Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Tekst se tokenizira na pojedinačne rečenice pomoću funkcije `sent_tokenize`.
-Svaka rečenica se zatim sprema u zaseban red **CSV datoteke**, što omogućuje jednostavniju daljnju obradu.
+Svaka rečenica se zatim sprema u zaseban red **CSV datoteke** što omogućuje jednostavniju daljnju obradu.
 
 Prilikom pokretanja programa korisnik mora unijeti:
 
