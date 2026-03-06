@@ -42,7 +42,6 @@ def skrapiranje_komentara(url, headless=False):
 def tokenizacija_recenica(naziv_csv,tekst_komentara):
     recenice = nltk.sent_tokenize(tekst_komentara)
     with open(naziv_csv+".csv", "w", newline="", encoding="utf8") as f:
-        a=0
         w = csv.writer(f)
         for recenica in recenice:
             w.writerow([recenica])
