@@ -9,7 +9,7 @@ Na projektu sudjeluju:
 
 # Opis projekta
 
-Projekt je izrađen u sklopu kolegija Prirodna obrada jezika, a bavi se analizom sentimenta nad tekstualnim komentarima. 
+Projekt je izrađen u sklopu kolegija Obrada prirodnog jezika, a bavi se analizom sentimenta nad tekstualnim komentarima. 
 Cilj projekta je prikupiti komentare s web-stranica, obraditi ih i pripremiti za daljnju analizu sentimenta.
 Za prikupljanje podataka koristi se portal [najdoktor.com](https://najdoktor.com). Riječ je o web-stranici na kojoj pacijenti mogu ocijeniti i ostavljati komentare liječnicima i stomatolozima u Hrvatskoj.
 Komentari na profilima doktora predstavljaju tekstualne recenzije koje mogu sadržavati pozitivna, negativna ili neutralna mišljenja pacijenata što ih čini pogodnima za zadatke analize sentimenta.
