@@ -1,4 +1,4 @@
-# TeamOPJ1
+# Sentilytics
 
 Na projektu sudjeluju:
 1. Valentina Glavan
