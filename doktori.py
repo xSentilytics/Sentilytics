@@ -19,4 +19,5 @@ DOKTORI = {
     "dr. Petra Zaverski": "https://najdoktor.com/petra-zaverski/d19161",
     "Biserka Pandža": "https://najdoktor.com/biserka-pandza/d10500",
     "Gojko Zovko": "https://najdoktor.com/gojko-zovko/d9506",
+    "Tatjana Knego": "https://najdoktor.com/tatjana-knego/d10797",
 }
