@@ -7,13 +7,11 @@ import time
 import nltk
 import csv
 
-def skrapiranje_komentara(url, headless=False):
+def skrapiranje_komentara(url, title, naziv_csv):
+    # promijeni preglednik ako ne koristiš Safari!
     preglednik = webdriver.Safari()
-    #promijeni preglednik ako ne koristiš Safari!
     preglednik.get(url)
-
     cekanje = WebDriverWait(preglednik, 10)
-
 #zatvaranje prozora za kolačiće
     try:
         gumb_pristanak = cekanje.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Consent']")))
@@ -21,7 +19,6 @@ def skrapiranje_komentara(url, headless=False):
         print("Prozor za kolačiće zatvoren!")
     except TimeoutException:
         print("Nije pronađen prozor za kolačiće!")
-
 #gumb "učitaj još komentara"
     while True:
         try:
@@ -33,23 +30,20 @@ def skrapiranje_komentara(url, headless=False):
             time.sleep(1)
         except NoSuchElementException:
             break
-
 #skrapiranje komentara
-    tekst_komentara = " ".join(komentar.text.strip() for komentar in preglednik.find_elements(By.CSS_SELECTOR, "div.comment p"))
-    preglednik.quit()
-    return tekst_komentara
+    with open(naziv_csv + ".csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f, delimiter='\t')
+        tokenizer = nltk.data.load("tokenizers/punkt/slovene.pickle")
+        for review_id, komentar in enumerate(preglednik.find_elements(By.CSS_SELECTOR, "div.comment p"), start=1):
+            recenice = tokenizer.tokenize(komentar.text.strip())
+            for sentence_id, recenica in enumerate(recenice, start=1):
+                w.writerow([1, url, title, review_id, sentence_id, recenica])
 
-def tokenizacija_recenica(naziv_csv,tekst_komentara):
-    recenice = nltk.sent_tokenize(tekst_komentara)
-    with open(naziv_csv+".csv", "w", newline="", encoding="utf8") as f:
-        w = csv.writer(f)
-        for recenica in recenice:
-            w.writerow([recenica])
+    preglednik.quit()
+
 
 if __name__ == "__main__":
     url = input("Unesi URL profila doktora: ")
-    naziv_csv = input("Unesi naziv CSV datoteke u koju želis spremiti rečenice.\nBez .csv! Pazi da ne upišeš naziv postojeće CSV datoteke u direktoriju programa jer će je prebrisati:")
-    tekst_komentara = skrapiranje_komentara(url)
-    tekst_komentara = tokenizacija_recenica(naziv_csv,tekst_komentara)
-
-
+    title = input("Unesi ime doktora: ")
+    naziv_csv = input("Unesi naziv CSV datoteke u koju želiš spremiti rečenice.\nBez .csv! Pazi da ne upišeš naziv postojeće CSV datoteke u direktoriju programa jer će je prebrisati:")
+    skrapiranje_komentara(url, title, naziv_csv)
