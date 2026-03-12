@@ -1,0 +1,16 @@
+DOKTORI = {
+    "Davor Todorić": "https://najdoktor.com/davor-todoric/d14089",
+    "Dražen Budimir": "https://najdoktor.com/drazen-budimir/d14090",
+    "Mirna Tomašković": "https://najdoktor.com/mirna-tomaskovic/d9753",
+    "dr. Tomica Bagatin": "https://najdoktor.com/dr-tomica-bagatin/d8249",
+    "Snježana Rakušić": "https://najdoktor.com/snjezana-rakusic/d9730",
+    "Vinka Vukosav": "https://najdoktor.com/vinka-vukosav/d20226",
+    "Vladimir Borić": "https://najdoktor.com/vladimir-boric/d16649",
+    "Dušanka Kaliterna-Martinović": "https://najdoktor.com/dusanka-kaliterna-martinovic/d14094",
+    "Jurica Maraković": "https://najdoktor.com/jurica-marakovic/d10259",
+    "Iva Ivanko": "https://najdoktor.com/iva-ivanko/d18453",
+    "Darko Birkić": "https://najdoktor.com/darko-birkic/d8472",
+    "Branka Vidrih": "https://najdoktor.com/branka-vidrih/d21065",
+    "Tajana Klepac-Pulanić": "https://najdoktor.com/tajana-klepac-pulanic/d8498",
+    "Vladimir Kovač": "https://najdoktor.com/vladimir-kovac/d10265"
+}
