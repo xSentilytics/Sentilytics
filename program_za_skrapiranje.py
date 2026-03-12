@@ -8,7 +8,7 @@ import nltk
 import csv
 
 def skrapiranje_komentara(url, title, naziv_csv):
-    # promijeni preglednik ako ne koristiš Safari!
+# promijeni preglednik ako ne koristiš Safari!
     preglednik = webdriver.Safari()
     preglednik.get(url)
     cekanje = WebDriverWait(preglednik, 10)
