@@ -19,7 +19,7 @@ Komentari na profilima doktora predstavljaju tekstualne recenzije koje mogu sadr
 U sklopu projekta razvijen je Python program za automatsko prikupljanje komentara s profila doktora na portalu [najdoktor.com](https://najdoktor.com). Program koristi biblioteku **Selenium** za upravljanje web-preglednikom i dohvaćanje komentara sa zadane stranice.
 Tijekom izvođenja program:
 
-1. učitava datoteku doktori.py s riječnikom doktora i URL-ovima njihovih profila.
+1. učitava datoteku `doktori.py` s riječnikom doktora i URL-ovima njihovih profila.
 2. otvara URL profila doktora
 3. pokušava zatvoriti prozor za prihvaćanje kolačića  
 4. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
