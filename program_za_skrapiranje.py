@@ -17,7 +17,7 @@ def skrapiranje_komentara(naziv_csv):
         for doktor in DOKTORI:
 # promijeni preglednik ako ne koristiš Safari!
             preglednik.get(DOKTORI[doktor])
-            print("Učitan profil doktora: ", doktor)
+            print("Otvoren profil doktora: ", doktor)
 #zatvaranje prozora za kolačiće
             try:
                 gumb_pristanak = WebDriverWait(preglednik, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Consent']")))
