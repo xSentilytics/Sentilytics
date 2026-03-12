@@ -24,19 +24,29 @@ Tijekom izvođenja program:
 3. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
 4. prikuplja tekst svih komentara sa stranice
 
-Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Tekst se tokenizira na pojedinačne rečenice pomoću funkcije `sent_tokenize`.
+Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Budući da ne postoji model za tokenizaciju rečenica treniran za hrvatski jezik unutar NLTK biblioteke, program koristi Punkt model treniran za slovenski jezik kako bi pravilno prepoznao granice rečenica.
 Svaka rečenica se zatim sprema u zaseban red **CSV datoteke** što omogućuje jednostavniju daljnju obradu.
+
+Za svaku rečenicu zapisuje se:
+1. identifikator tima (u ovom slučaju broj 1)
+2. URL stranice
+3. ime doktora (title)
+4. redni broj komentara (review_id)
+5. redni broj rečenice unutar komentara (sentence_id)
+6. tekst rečenice
 
 Prilikom pokretanja programa korisnik mora unijeti:
 
-1. **URL profila doktora** s kojeg će se skrapirati komentari  
-2. **Naziv CSV datoteke** u koju će se spremiti rečenice (bez nastavka `.csv`)
+1. **URL profila doktora** s kojeg će se skrapirati komentari
+2. **Ime doktora**  
+3. **Naziv CSV datoteke** u koju će se spremiti rečenice (bez nastavka `.csv`)
 
 Program zatim:
 
 1. prikuplja komentare sa stranice  
 2. razdvaja tekst na rečenice  
 3. sprema rečenice u CSV datoteku.
+
 
 **Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv CSV datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
 
