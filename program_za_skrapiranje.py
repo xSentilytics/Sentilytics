@@ -33,6 +33,7 @@ def skrapiranje_komentara(url, title, naziv_csv):
 #skrapiranje komentara
     with open(naziv_csv + ".csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter='\t')
+        w.writerow(["groupid", "url", "title", "review_id", "sentence_id", "text"])
         tokenizer = nltk.data.load("tokenizers/punkt/slovene.pickle")
         for review_id, komentar in enumerate(preglednik.find_elements(By.CSS_SELECTOR, "div.comment p"), start=1):
             recenice = tokenizer.tokenize(komentar.text.strip())
