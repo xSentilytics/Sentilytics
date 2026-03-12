@@ -20,7 +20,7 @@ def skrapiranje_komentara(naziv_csv):
             print("Učitan profil doktora: ", doktor)
 #zatvaranje prozora za kolačiće
             try:
-                gumb_pristanak = WebDriverWait(preglednik, 2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Consent']")))
+                gumb_pristanak = WebDriverWait(preglednik, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[aria-label='Consent']")))
                 preglednik.execute_script("arguments[0].click();", gumb_pristanak)
                 print("Prozor za kolačiće zatvoren!")
             except TimeoutException:
@@ -28,7 +28,7 @@ def skrapiranje_komentara(naziv_csv):
 #gumb "učitaj još komentara"
             while True:
                 try:
-                    gumb_ucitaj_vise = WebDriverWait(preglednik, 2).until(EC.element_to_be_clickable((By.ID, "load-more-comments")))
+                    gumb_ucitaj_vise = WebDriverWait(preglednik, 5).until(EC.element_to_be_clickable((By.ID, "load-more-comments")))
                     preglednik.execute_script("arguments[0].click();", gumb_ucitaj_vise)
                     print("Učitavanje komentara...")
                 except TimeoutException:
