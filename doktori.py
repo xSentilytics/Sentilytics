@@ -15,5 +15,8 @@ DOKTORI = {
     "dr. Željko Ivanec": "https://najdoktor.com/%C5%BDeljko-Ivanec/d17204",
     "dr.med. Tihana Mazalin": "https://najdoktor.com/Tihana-Mazalin/d16090",
     "Mario Habek": "https://najdoktor.com/mario-habek/d8962",
-    "Valentina Koroskoski": "https://najdoktor.com/valentina-koroskoski/d13810"
+    "Valentina Koroskoski": "https://najdoktor.com/valentina-koroskoski/d13810",
+    "dr. Petra Zaverski": "https://najdoktor.com/petra-zaverski/d19161",
+    "Biserka Pandža": "https://najdoktor.com/biserka-pandza/d10500",
+    "Gojko Zovko": "https://najdoktor.com/gojko-zovko/d9506",
 }
