@@ -3,7 +3,6 @@ DOKTORI = {
     "Dražen Budimir": "https://najdoktor.com/drazen-budimir/d14090",
     "Mirna Tomašković": "https://najdoktor.com/mirna-tomaskovic/d9753",
     "dr. Tomica Bagatin": "https://najdoktor.com/dr-tomica-bagatin/d8249",
-    "Snježana Rakušić": "https://najdoktor.com/snjezana-rakusic/d9730",
     "Vinka Vukosav": "https://najdoktor.com/vinka-vukosav/d20226",
     "Vladimir Borić": "https://najdoktor.com/vladimir-boric/d16649",
     "Dušanka Kaliterna-Martinović": "https://najdoktor.com/dusanka-kaliterna-martinovic/d14094",
@@ -12,10 +11,9 @@ DOKTORI = {
     "Darko Birkić": "https://najdoktor.com/darko-birkic/d8472",
     "Branka Vidrih": "https://najdoktor.com/branka-vidrih/d21065",
     "Tajana Klepac-Pulanić": "https://najdoktor.com/tajana-klepac-pulanic/d8498",
-    "Vladimir Kovač": "https://najdoktor.com/vladimir-kovac/d10265"
+    "Vladimir Kovač": "https://najdoktor.com/vladimir-kovac/d10265",
     "dr. Željko Ivanec": "https://najdoktor.com/%C5%BDeljko-Ivanec/d17204",
-    "dr.sc. Leila Latić Hodžić": "https://najdoktor.com/Leila-Lati%C4%87%20Hod%C5%BEi%C4%87/d20664",
     "dr.med. Tihana Mazalin": "https://najdoktor.com/Tihana-Mazalin/d16090",
     "Mario Habek": "https://najdoktor.com/mario-habek/d8962",
-    "Valentina Koroskoski": "https://najdoktor.com/valentina-koroskoski/d13810",
+    "Valentina Koroskoski": "https://najdoktor.com/valentina-koroskoski/d13810"
 }
