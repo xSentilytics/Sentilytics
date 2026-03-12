@@ -13,4 +13,9 @@ DOKTORI = {
     "Branka Vidrih": "https://najdoktor.com/branka-vidrih/d21065",
     "Tajana Klepac-Pulanić": "https://najdoktor.com/tajana-klepac-pulanic/d8498",
     "Vladimir Kovač": "https://najdoktor.com/vladimir-kovac/d10265"
+    "dr. Željko Ivanec": "https://najdoktor.com/%C5%BDeljko-Ivanec/d17204",
+    "dr.sc. Leila Latić Hodžić": "https://najdoktor.com/Leila-Lati%C4%87%20Hod%C5%BEi%C4%87/d20664",
+    "dr.med. Tihana Mazalin": "https://najdoktor.com/Tihana-Mazalin/d16090",
+    "Mario Habek": "https://najdoktor.com/mario-habek/d8962",
+    "Valentina Koroskoski": "https://najdoktor.com/valentina-koroskoski/d13810",
 }
