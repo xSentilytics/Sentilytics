@@ -42,7 +42,6 @@ def skrapiranje_komentara(naziv_csv):
 
         preglednik.quit()
 
-
 if __name__ == "__main__":
     naziv_csv = input("Unesi naziv CSV datoteke u koju želiš spremiti rečenice (Bez .csv!):")
     skrapiranje_komentara(naziv_csv)
