@@ -14,15 +14,15 @@ def skrapiranje_komentara(naziv_csv):
     with open(naziv_csv + ".csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f, delimiter="\t")
         w.writerow(["groupid", "url", "title", "review_id", "sentence_id", "text"])
-
         tokenizer = nltk.data.load("tokenizers/punkt/slovene.pickle")
         review_id = 0
+        preglednik = webdriver.Safari()
 
         for doktor in DOKTORI:
 
             # promijeni preglednik ako ne koristiš Safari!
-            preglednik = webdriver.Safari()
             preglednik.get(DOKTORI[doktor])
+            print("Otvoren URL doktora:", doktor)
 
             cekanje = WebDriverWait(preglednik, 10)
 
@@ -62,12 +62,8 @@ def skrapiranje_komentara(naziv_csv):
                 for sentence_id, recenica in enumerate(recenice, start=1):
                     w.writerow([1,DOKTORI[doktor],doktor,review_id,sentence_id,recenica])
 
-            preglednik.quit()
-
+        preglednik.quit()
 
 if __name__ == "__main__":
     naziv_csv = input("Unesi naziv CSV datoteke u koju želiš spremiti rečenice (Bez .csv!): ")
     skrapiranje_komentara(naziv_csv)
-
-
-
