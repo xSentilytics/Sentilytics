@@ -19,10 +19,11 @@ Komentari na profilima doktora predstavljaju tekstualne recenzije koje mogu sadr
 U sklopu projekta razvijen je Python program za automatsko prikupljanje komentara s profila doktora na portalu [najdoktor.com](https://najdoktor.com). Program koristi biblioteku **Selenium** za upravljanje web-preglednikom i dohvaćanje komentara sa zadane stranice.
 Tijekom izvođenja program:
 
-1. otvara zadani URL profila doktora
-2. pokušava zatvoriti prozor za prihvaćanje kolačića  
-3. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
-4. prikuplja tekst svih komentara sa stranice
+1. učitava datoteku doktori.py s riječnikom doktora i URL-ovima njihovih profila.
+2. otvara URL profila doktora
+3. pokušava zatvoriti prozor za prihvaćanje kolačića  
+4. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
+5. prikuplja tekst svih komentara sa stranice
 
 Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Budući da ne postoji model za tokenizaciju rečenica treniran za hrvatski jezik unutar NLTK biblioteke, program koristi Punkt model treniran za slovenski jezik kako bi pravilno prepoznao granice rečenica.
 Svaka rečenica se zatim sprema u zaseban red **CSV datoteke** što omogućuje jednostavniju daljnju obradu.
@@ -35,11 +36,7 @@ Za svaku rečenicu zapisuje se:
 5. redni broj rečenice unutar komentara (sentence_id)
 6. tekst rečenice
 
-Prilikom pokretanja programa korisnik mora unijeti:
-
-1. **URL profila doktora** s kojeg će se skrapirati komentari
-2. **Ime doktora**  
-3. **Naziv CSV datoteke** u koju će se spremiti rečenice (bez nastavka `.csv`)
+Prilikom pokretanja programa korisnik mora unijeti **naziv CSV datoteke** u koju će se spremiti rečenice (bez nastavka `.csv`)
 
 Program zatim:
 
