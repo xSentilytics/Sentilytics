@@ -1,5 +1,4 @@
 DOKTORI = {
-    "Davor Todorić": "https://najdoktor.com/davor-todoric/d14089",
     "Dražen Budimir": "https://najdoktor.com/drazen-budimir/d14090",
     "Mirna Tomašković": "https://najdoktor.com/mirna-tomaskovic/d9753",
     "dr. Tomica Bagatin": "https://najdoktor.com/dr-tomica-bagatin/d8249",
