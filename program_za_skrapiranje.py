@@ -24,7 +24,7 @@ def skrapiranje_komentara(naziv_csv):
             preglednik.get(DOKTORI[doktor])
             print("Otvoren URL doktora:", doktor)
 
-            cekanje = WebDriverWait(preglednik, 10)
+            cekanje = WebDriverWait(preglednik, 2)
 
             # zatvaranje prozora za kolačiće
             try:
