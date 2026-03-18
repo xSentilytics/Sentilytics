@@ -63,7 +63,6 @@ def skrapiranje_komentara(naziv_xlsx):
 
     preglednik.quit()
 
-    # Save Excel file
     wb.save(naziv_xlsx + ".xlsx")
 
 if __name__ == "__main__":
