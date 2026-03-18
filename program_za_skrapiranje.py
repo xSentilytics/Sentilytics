@@ -15,7 +15,7 @@ def skrapiranje_komentara(naziv_xlsx):
     ws = wb.active
     ws.title = "Komentari"
 
-    ws.append(["groupid", "url", "title", "review_id", "sentence_id", "text"])
+    ws.append(["groupid", "url", "title", "review_id", "sentence_id", "text", "label", "metadata-year", "metadata-other"])
 
     tokenizer = nltk.data.load("tokenizers/punkt/slovene.pickle")
     review_id = 0
