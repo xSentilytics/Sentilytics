@@ -40,7 +40,6 @@ def skrapiranje_komentara(naziv_xlsx):
         except TimeoutException:
             print("Nije pronađen prozor za kolačiće!")
 
-        # Load more comments
         while True:
             try:
                 gumb_ucitaj_vise = preglednik.find_element(By.ID, "load-more-comments")
