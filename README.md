@@ -26,7 +26,7 @@ Tijekom izvođenja program:
 5. prikuplja tekst svih komentara sa stranice
 
 Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Budući da ne postoji model za tokenizaciju rečenica treniran za hrvatski jezik unutar NLTK biblioteke, program koristi Punkt model treniran za slovenski jezik kako bi pravilno prepoznao granice rečenica.
-Svaka rečenica se zatim sprema u zaseban red **CSV datoteke** što omogućuje jednostavniju daljnju obradu.
+Svaka rečenica se zatim sprema u zaseban red **Excel datoteke** što omogućuje jednostavniju daljnju obradu.
 
 Za svaku rečenicu zapisuje se:
 1. identifikator tima (u ovom slučaju broj 1)
@@ -36,16 +36,16 @@ Za svaku rečenicu zapisuje se:
 5. redni broj rečenice unutar komentara (sentence_id)
 6. tekst rečenice
 
-Prilikom pokretanja programa korisnik mora unijeti **naziv CSV datoteke** u koju će se spremiti rečenice (bez nastavka `.csv`)
+Prilikom pokretanja programa korisnik mora unijeti **naziv Excel datoteke** u koju će se spremiti rečenice (bez nastavka `.xlsx`)
 
 Program zatim:
 
 1. prikuplja komentare sa stranice  
 2. razdvaja tekst na rečenice  
-3. sprema rečenice u CSV datoteku.
+3. sprema rečenice u Excel datoteku.
 
 
-**Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv CSV datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
+**Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv Excel datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
 
 
 
