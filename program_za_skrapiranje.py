@@ -66,5 +66,5 @@ def skrapiranje_komentara(naziv_xlsx):
     wb.save(naziv_xlsx + ".xlsx")
 
 if __name__ == "__main__":
-    naziv = input("Unesi naziv Excel datoteke (bez .xlsx): ")
+    naziv_xlsx = input("Unesi naziv Excel datoteke (bez .xlsx): ")
     skrapiranje_komentara(naziv)
