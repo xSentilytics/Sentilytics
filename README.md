@@ -25,7 +25,7 @@ Tijekom izvođenja program:
 4. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
 5. prikuplja tekst svih komentara sa stranice
 
-Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **NLTK**. Budući da ne postoji model za tokenizaciju rečenica treniran za hrvatski jezik unutar NLTK biblioteke, program koristi Punkt model treniran za slovenski jezik kako bi pravilno prepoznao granice rečenica.
+Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **CLASSLA**. Program koristi model treniran za hrvatski *nestandardni* jezik kako bi pravilno prepoznao granice rečenica.
 Svaka rečenica se zatim sprema u zaseban red **Excel datoteke** što omogućuje jednostavniju daljnju obradu.
 
 Za svaku rečenicu zapisuje se:
