@@ -10,7 +10,7 @@ from openpyxl import Workbook
 
 from doktori import DOKTORI
 
-def skrapiranje_komentara(naziv_xlsx):
+def skrapiranje_komentara(naziv):
     wb = Workbook()
     ws = wb.active
     ws.title = "Komentari"
@@ -63,7 +63,7 @@ def skrapiranje_komentara(naziv_xlsx):
 
     preglednik.quit()
 
-    wb.save(naziv_xlsx + ".xlsx")
+    wb.save(naziv + ".xlsx")
 
 if __name__ == "__main__":
     naziv = input("Unesi naziv Excel datoteke (bez .xlsx): ")
