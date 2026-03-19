@@ -4,8 +4,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
-import nltk
-
+import re
+import classla
 from openpyxl import Workbook
 
 from doktori import DOKTORI
@@ -14,11 +14,11 @@ def skrapiranje_komentara(naziv_xlsx):
     wb = Workbook()
     ws = wb.active
     ws.title = "Komentari"
-
     ws.append(["groupid", "url", "title", "review_id", "sentence_id", "text", "label", "metadata-year", "metadata-other"])
 
-    tokenizer = nltk.data.load("tokenizers/punkt/slovene.pickle")
+    nlp = classla.Pipeline('hr', type='nonstandard')
     review_id = 0
+    
     preglednik = webdriver.Safari()
 
     for doktor in DOKTORI:
@@ -56,15 +56,15 @@ def skrapiranje_komentara(naziv_xlsx):
 
         for komentar in preglednik.find_elements(By.CSS_SELECTOR, "div.comment p"):
             review_id += 1
-            recenice = tokenizer.tokenize(komentar.text.strip())
-
-            for sentence_id, recenica in enumerate(recenice, start=1):
-                ws.append([1,DOKTORI[doktor],doktor,review_id,sentence_id,recenica])
+            tekst = re.sub(r"\s+", " ", komentar.text).strip()
+            recenice = nlp(tekst)
+            for sentence_id, recenica in enumerate(recenice.sentences, start=1):
+                ws.append([1,DOKTORI[doktor],doktor,review_id,sentence_id,recenica.text])
 
     preglednik.quit()
 
     wb.save(naziv_xlsx + ".xlsx")
 
 if __name__ == "__main__":
-    naziv_xlsx = input("Unesi naziv Excel datoteke (bez .xlsx): ")
+    naziv = input("Unesi naziv Excel datoteke (bez .xlsx): ")
     skrapiranje_komentara(naziv)
