@@ -19,5 +19,5 @@ DOKTORI = {
     "Biserka Pandža": "https://najdoktor.com/biserka-pandza/d10500",
     "Gojko Zovko": "https://najdoktor.com/gojko-zovko/d9506",
     "Tatjana Knego": "https://najdoktor.com/tatjana-knego/d10797",
-    "prof.dr.sc. Vesna Brinar": "https://najdoktor.com/profdrsc-vesna-brinar/d9309",
+    "prof.dr.sc. Vesna Brinar": "https://najdoktor.com/profdrsc-vesna-brinar/d9309"
 }
