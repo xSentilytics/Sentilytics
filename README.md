@@ -26,7 +26,7 @@ Tijekom izvođenja program:
 5. prikuplja tekst svih komentara sa stranice
 
 Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **CLASSLA**. Program koristi model treniran za hrvatski *nestandardni* jezik kako bi pravilno prepoznao granice rečenica.
-Svaka rečenica se zatim sprema u zaseban red **Excel datoteke** što omogućuje jednostavniju daljnju obradu.
+Svaka rečenica se zatim sprema u zaseban red **Excel datoteke** pomoću biblioteke **openpyxl** što omogućuje jednostavniju daljnju obradu.
 
 Za svaku rečenicu zapisuje se:
 1. identifikator tima (u ovom slučaju broj 1)
@@ -44,8 +44,22 @@ Program zatim:
 2. razdvaja tekst na rečenice  
 3. sprema rečenice u Excel datoteku.
 
-
 **Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv Excel datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
+
+# Pilot anotiranje
+Nakon izrade korpusa provedeno je pilot anotiranje sentimenta kao inicijalna faza s ciljem evaluacije i usklađivanja konzistentnosti među anotatorima prije primjene na cjelokupnom skupu podataka. 
+
+Sentiment se određuje prema 5-stupanjskoj ljestvici:
+  1 ‒ negative: negativan sentiment 
+  2 ‒ neutral: neutralan sentiment 
+  3 ‒ positive: pozitivan sentiment 
+  4 ‒ mixed: dio rečenice je pozitivan, a dio negativan 
+  5 ‒ sarcasm: sarkastični i ironični komentari. 
+
+Iz prikupljenog korpusa nasumično je odabrano 150 rečenica koje su činile skup za anotaciju. Svi članovi grupe dobili su identičnu verziju podataka, uključujući izvorne stupce, tekst i dodatni stupac predviđen za oznake.
+Anotacija je provedena individualno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka individualnog rada, uslijedila je zajednička analiza rezultata. Izračunali smo kappa vrijednosti koja predstavlja stupanj slaganja između anotatora. U našem slučaju kappa vrijednost iznosi 0,76 što ukazuje na pouzdano slaganje među anotatorima. 
+
+
 
 
 
