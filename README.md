@@ -58,5 +58,3 @@ Sentiment se određuje prema 5-stupanjskoj ljestvici:
 
 Iz prikupljenog korpusa nasumično je odabrano 150 rečenica koje su činile skup za anotaciju. Svi članovi grupe dobili su identičnu verziju podataka, uključujući izvorne stupce, tekst i dodatni stupac predviđen za oznake.
 Anotacija je provedena individualno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka individualnog rada, uslijedila je zajednička analiza rezultata. Pomoću biblioteka **Pandas** i **statsmodels**, izračunali smo kappa vrijednost koja predstavlja stupanj slaganja među anotatorima. U našem slučaju kappa vrijednost iznosi 0,76 što ukazuje na pouzdano slaganje među anotatorima.
-
-TEST
