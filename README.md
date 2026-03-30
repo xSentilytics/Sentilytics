@@ -25,8 +25,8 @@ Tijekom izvođenja program:
 4. automatski klikće gumb za učitavanje dodatnih komentara dok god je dostupan  
 5. prikuplja tekst svih komentara sa stranice
 
-Prikupljeni tekst komentara dalje se obrađuje pomoću biblioteke **CLASSLA**. Program koristi model treniran za hrvatski *nestandardni* jezik kako bi pravilno prepoznao granice rečenica.
-Svaka rečenica se zatim sprema u zaseban red **Excel datoteke** pomoću biblioteke **openpyxl** što omogućuje jednostavniju daljnju obradu.
+Prikupljeni tekst komentara dalje se tokenizira u rečenice pomoću biblioteke **CLASSLA**. Program koristi model treniran za hrvatski *nestandardni* jezik kako bi pravilno prepoznao granice rečenica.
+Svaka rečenica se zatim sprema u zaseban red **.xlsx datoteke** pomoću biblioteke **Openpyxl** što omogućuje jednostavniju daljnju obradu.
 
 Za svaku rečenicu zapisuje se:
 1. identifikator tima (u ovom slučaju broj 1)
@@ -36,15 +36,15 @@ Za svaku rečenicu zapisuje se:
 5. redni broj rečenice unutar komentara (sentence_id)
 6. tekst rečenice
 
-Prilikom pokretanja programa korisnik mora unijeti **naziv Excel datoteke** u koju će se spremiti rečenice (bez nastavka `.xlsx`)
+Prilikom pokretanja programa korisnik mora unijeti **naziv .xlsx datoteke** u koju će se spremiti rečenice (bez nastavka `.xlsx`)
 
 Program zatim:
 
 1. prikuplja komentare sa stranice  
 2. razdvaja tekst na rečenice  
-3. sprema rečenice u Excel datoteku.
+3. sprema rečenice u .xlsx datoteku.
 
-**Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv Excel datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
+**Napomena:** Program je trenutno konfiguriran za korištenje **Safari WebDrivera**. Ako se koristi drugi preglednik, potrebno je promijeniti inicijalizaciju WebDrivera u kodu. Također treba paziti da uneseni naziv .x datoteke ne odgovara već postojećoj datoteci u direktoriju programa jer će u tom slučaju datoteka biti prebrisana.
 
 # Pilot anotiranje
 Nakon izrade korpusa provedeno je pilot anotiranje sentimenta kao inicijalna faza s ciljem evaluacije i usklađivanja konzistentnosti među anotatorima prije primjene na cjelokupnom skupu podataka. 
@@ -57,7 +57,7 @@ Sentiment se određuje prema 5-stupanjskoj ljestvici:
   5. sarcasm: sarkastični i ironični komentari. 
 
 Iz prikupljenog korpusa nasumično je odabrano 150 rečenica koje su činile skup za anotaciju. Svi članovi grupe dobili su identičnu verziju podataka, uključujući izvorne stupce, tekst i dodatni stupac predviđen za oznake.
-Anotacija je provedena individualno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka individualnog rada, uslijedila je zajednička analiza rezultata. Izračunali smo kappa vrijednost koja predstavlja stupanj slaganja između anotatora. U našem slučaju kappa vrijednost iznosi 0,76 što ukazuje na pouzdano slaganje među anotatorima. 
+Anotacija je provedena individualno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka individualnog rada, uslijedila je zajednička analiza rezultata. Pomoću biblioteka **Pandas** i **statsmodels**, izračunali smo kappa vrijednost koja predstavlja stupanj slaganja među anotatorima. U našem slučaju kappa vrijednost iznosi 0,76 što ukazuje na pouzdano slaganje među anotatorima. 
 
 
 
