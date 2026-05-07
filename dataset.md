@@ -2,14 +2,14 @@
 
 ## Pregled
 
-Ovaj skup podataka koristi se za klasifikaciju sentimenta.  
+Ovaj skup podataka koristi se za klasifikaciju sentimenta.  <br>
 Sadrži ručno označene tekstualne uzorke s pet kategorija sentimenta.
 
 ---
 
 ## Osnovne informacije
 
-| Ukupan broj uzoraka | 3948 |. 
+| Ukupan broj uzoraka | 3948 |<br>
 | Ulazna datoteka | korpus_cijeli.xlsx |
 
 ---
