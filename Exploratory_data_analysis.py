@@ -1,6 +1,6 @@
 import pandas as pd
 
-df = pd.read_excel("korpus.xlsx")   
+df = pd.read_excel("korpus_cijeli.xlsx")   
 
 
 TEXT_COLUMN = "text"      
