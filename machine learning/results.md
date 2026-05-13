@@ -15,7 +15,7 @@ U prvom prolazu kao training set koristili smo skup naše grupe (train-1), a u d
 | test-4 | Linear SVM   | 0,6630 | 0,7127 | 0,6630 | 0,6814 |
 | test-4 | KNN (k = 7)  | 0,6413 | 0,6766 | 0,6413 | 0,6457 |
 
-## TRAIN (sve grupe zajedno)
+## TRAIN-1234 (sve grupe zajedno)
 
 | Test | Model | Accuracy | Precision | Recall | F1 |
 |---|---|---:|---:|---:|---:|
