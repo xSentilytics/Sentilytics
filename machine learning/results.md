@@ -1,6 +1,6 @@
 # Rezultati: SVM i KNN s TF-IDF
 
-U prvom prolazu kao training set koristili smo skup naše grupe (Train 1), a u drugom kombinirani training set svih grupa (TRAIN). Značajke su izvučene TF-IDF-om uz unigrame i bigrame. 
+U prvom prolazu kao training set koristili smo skup naše grupe (train-1), a u drugom kombinirani training set svih grupa (TRAIN-1234). Značajke su izvučene TF-IDF-om uz unigrame i bigrame. 
 
 ## Train 1 (samo naša grupa)
 
