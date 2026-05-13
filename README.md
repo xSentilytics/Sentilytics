@@ -58,3 +58,30 @@ Sentiment se određuje prema 5-stupanjskoj ljestvici:
 
 Iz prikupljenog korpusa nasumično je odabrano 150 rečenica koje su činile skup za anotaciju. Svi članovi grupe dobili su identičnu verziju podataka, uključujući izvorne stupce, tekst i dodatni stupac predviđen za oznake.
 Anotacija je provedena individualno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka individualnog rada, uslijedila je zajednička analiza rezultata. Pomoću biblioteka **Pandas** i **statsmodels**, izračunali smo kappa vrijednost koja predstavlja stupanj slaganja među anotatorima. U našem slučaju kappa vrijednost iznosi 0,76 što ukazuje na pouzdano slaganje među anotatorima.
+
+# Anotiranje korpusa
+
+Nakon pilot faze cjelokupni je korpus označen istom 5-stupanjskom ljestvicom (negative, neutral, positive, mixed, sarcasm). Anotaciju je provelo nekoliko članova grupe nezavisno jedan o drugome, dok je preostali član imao ulogu **data curatora**; osobe koja samostalno odlučuje o konačnoj oznaci u slučajevima gdje se anotatori nisu složili. Time svaka rečenica završava s jedinstvenom, dogovorenom oznakom.
+
+# Strojno učenje
+
+Nakon anotiranja korpusa, provedena je klasifikacija sentimenta primjenom dvaju klasičnih algoritama strojnog učenja: **metoda potpomognutih vektora (SVM)** i **K najbližih susjeda (KNN)**. Cilj je bio usporediti njihovu uspješnost na zadatku predviđanja sentimenta rečenica iz korpusa.
+
+Za izlučivanje značajki korišten je **TF-IDF** (Term Frequency – Inverse Document Frequency) iz biblioteke **scikit-learn**, uz unigrame i bigrame, `min_df = 2` i `sublinear_tf = True`.
+
+Cijeli pipeline razdijeljen je u nekoliko Python modula radi preglednosti i ponovne upotrebe:
+
+1. `tfidf_vectorizer.py`: definira i fitta TF-IDF vektorizator sa zajedničkom konfiguracijom za oba klasifikatora.
+2. `evaluation.py`: sadrži pomoćne funkcije za izračun metrika, ispis classification reporta i prikaz confusion matrixa.
+3. `svm_classifier.py`: implementacija linearnog SVM-a; sadrži `train()` funkciju i može se pokrenuti samostalno.
+4. `knn_classifier.py`: implementacija KNN-a (k = 7, kosinusna udaljenost); istog oblika kao SVM modul.
+5. `main.py`: glavna skripta koja na jednom training setu istrenira oba modela i evaluira ih na četiri test seta.
+
+Za svaku kombinaciju (test set, model) program računa četiri metrike:
+
+1. **accuracy**: udio točno klasificiranih rečenica.
+2. **precision**: preciznost ponderirana brojem primjera po klasi.
+3. **recall**: odziv ponderiran brojem primjera po klasi.
+4. **F1**: harmonijska sredina precisiona i recalla, također ponderirana.
+
+Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Detaljna analiza rezultata nalazi se u datoteci `results.md`.
