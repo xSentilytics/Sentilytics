@@ -84,4 +84,4 @@ Za svaku kombinaciju (test set, model) program računa četiri metrike:
 3. **recall**: odziv ponderiran brojem primjera po klasi.
 4. **F1**: harmonijska sredina precisiona i recalla, također ponderirana.
 
-Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Detaljna analiza rezultata nalazi se u datoteci `results.md`.
+Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results.md`.
