@@ -67,7 +67,7 @@ Nakon pilot faze cjelokupni je korpus označen istom 5-stupanjskom ljestvicom (n
 
 Nakon anotiranja korpusa, provedena je klasifikacija sentimenta primjenom dvaju klasičnih algoritama strojnog učenja: **metoda potpomognutih vektora (SVM)** i **K najbližih susjeda (KNN)**. Cilj je bio usporediti njihovu uspješnost na zadatku predviđanja sentimenta rečenica iz korpusa.
 
-Za izlučivanje značajki korišten je **TF-IDF** (Term Frequency – Inverse Document Frequency) iz biblioteke **scikit-learn**, uz unigrame i bigrame, `min_df = 2` i `sublinear_tf = True`.
+Za izlučivanje značajki korišten je **TF-IDF** (Term Frequency - Inverse Document Frequency) iz biblioteke **scikit-learn**, uz unigrame i bigrame, `min_df = 2` i `sublinear_tf = True`.
 
 Cijeli pipeline razdijeljen je u nekoliko Python modula radi preglednosti i ponovne upotrebe:
 
@@ -75,7 +75,7 @@ Cijeli pipeline razdijeljen je u nekoliko Python modula radi preglednosti i pono
 2. `evaluation.py`: sadrži pomoćne funkcije za izračun metrika, ispis classification reporta i prikaz confusion matrixa.
 3. `svm_classifier.py`: implementacija linearnog SVM-a; sadrži `train()` funkciju i može se pokrenuti samostalno.
 4. `knn_classifier.py`: implementacija KNN-a (k = 7, kosinusna udaljenost); istog oblika kao SVM modul.
-5. `main.py`: glavna skripta koja na jednom training setu istrenira oba modela i evaluira ih na četiri test seta.
+5. `main.py`: glavna skripta koja na jednom training setu trenira oba modela, sprema ih i evaluira ih za sva četiri test seta.
 
 Za svaku kombinaciju (test set, model) program računa četiri metrike:
 
@@ -84,4 +84,36 @@ Za svaku kombinaciju (test set, model) program računa četiri metrike:
 3. **recall**: odziv ponderiran brojem primjera po klasi.
 4. **F1**: harmonijska sredina precisiona i recalla, također ponderirana.
 
-Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results.md`.
+Istrenirani modeli spremaju se u folder skripte kao .joblib datoteke (svm_model.joblib i knn_model.joblib). Svaka spremljena datoteka sadrži ne samo model nego i fittani TF-IDF vektorizator, popis klasa te oznaku tipa modela što je dovoljno za kasniju inferenciju bez ponovnog procesa treniranja ili fittanja vektorizatora.
+
+Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results_ml.md`.
+
+Potrebne biblioteke:
+```bash
+pip install scikit-learn pandas joblib
+```
+
+# Duboko učenje
+
+Nakon modela strojnog učenja klasifikaciju sentimenta proveli smo i pomoću dviju neuronskih arhitektura: **TextCNN** (konvolucijska mreža za tekst) i **BiLSTM** (bidirekcijska rekurentna mreža). Implementacija je napravljena u **PyTorchu**, a umjesto TF-IDF-a kao značajke se koriste hrvatski **fastText** vektorski prikazi riječi (`cc.hr.300`, dimenzija 300). Datoteka se može preuzeti s [fastText repozitorija](https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.hr.300.vec.gz)
+
+Modeli se treniraju isključivo na kombiniranom training setu **TRAIN-1234**. Kao validacijski skup za rano zaustavljanje koristi se **validation-1**, a evaluacija se zatim provodi na sva četiri test seta (test-1 do test-4), tako da su metrike izravno usporedive s rezultatima SVM-a i KNN-a iz prethodnog poglavlja.
+
+Pipeline je razdijeljen u sljedeće module:
+
+1. `embeddings.py`: tokenizacija hrvatskog teksta uz očuvanje dijakritika, izgradnja vokabulara i učitavanje fastText `.vec` datoteke. Iz cijele `.vec` datoteke zadržavaju se samo vektori za one riječi koje se pojavljuju u training setu.
+2. `pytorch_utils.py`: zajednička petlja za treniranje s class-weighted cross-entropy lossom, ranim zaustavljanjem (patience 3 na `val_loss`), automatskim odabirom uređaja (CUDA → Apple MPS → CPU) te funkcijama za spremanje i učitavanje modela.
+3. `cnn_classifier.py`: implementacija TextCNN arhitekture; sadrži klasu `TextCNN` i standalone runner.
+4. `lstm_classifier.py`: implementacija BiLSTM arhitekture; iste strukture kao CNN modul.
+5. `main_dl.py`: glavna skripta koja u jednom prolazu trenira oba modela, sprema ih i evaluira za sva četiri test seta.
+
+Za svaku kombinaciju (test set, model) program računa iste četiri metrike kao i za strojno učenje. 
+
+Istrenirani modeli spremaju se u folder skripte kao `.pt` datoteke (`cnn_model.pt` i `lstm_model.pt`). Uz težine modela, svaka spremljena datoteka sadrži i vokabular, labele te `max_len`, pa je sama po sebi dovoljna za kasniju inferenciju.
+
+Rezultati se ispisuju u terminal i spremaju u datoteku `results_dl.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results_dl.md`.
+
+Potrebne biblioteke:
+```bash
+pip install torch scikit-learn pandas numpy
+```
