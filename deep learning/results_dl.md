@@ -15,9 +15,9 @@ Za duboko učenje koristili smo TextCNN i BiLSTM. Modeli su trenirani na kombini
 | test-4 | TextCNN | 0,7138 | 0,8013 | 0,7138 | 0,7433 |
 | test-4 | BiLSTM  | 0,6884 | 0,7908 | 0,6884 | 0,7266 |
  
-### Confusion matrice (TRAIN-1234)
+### Matrice konfuzije (TRAIN-1234)
  
-U svim matricama redovi su prave (true) klase, a stupci predviđene (predicted) klase.
+U svim matricama redovi su stvarne klase, a stupci predviđene klase.
  
 #### test-1 — TextCNN
  
