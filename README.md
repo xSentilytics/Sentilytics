@@ -95,7 +95,7 @@ pip install scikit-learn pandas joblib
 
 # Duboko učenje
 
-Nakon modela strojnog učenja klasifikaciju sentimenta proveli smo i pomoću dviju neuronskih arhitektura: **TextCNN** (konvolucijska mreža za tekst) i **BiLSTM** (bidirekcijska rekurentna mreža). Implementacija je napravljena u **PyTorchu**, a umjesto TF-IDF-a kao značajke se koriste hrvatski **fastText** vektorski prikazi riječi (`cc.hr.300`, dimenzija 300). Datoteka se može preuzeti s [fastText repozitorija](https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.hr.300.vec.gz)
+Nakon modela strojnog učenja klasifikaciju sentimenta proveli smo i pomoću dviju neuronskih arhitektura: **TextCNN** (konvolucijska mreža za tekst) i **BiLSTM** (bidirekcijska rekurentna mreža). Implementacija je napravljena u **PyTorchu**, a umjesto TF-IDF-a kao značajke se koriste hrvatski **fastText** vektorski prikazi riječi (`cc.hr.300`, dimenzija 300). Datoteka se može preuzeti s [fastText repozitorija](https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.hr.300.vec.gz).
 
 Modeli se treniraju isključivo na kombiniranom training setu **TRAIN-1234**. Kao validacijski skup za rano zaustavljanje koristi se **validation-1**, a evaluacija se zatim provodi na sva četiri test seta (test-1 do test-4), tako da su metrike izravno usporedive s rezultatima SVM-a i KNN-a iz prethodnog poglavlja.
 
