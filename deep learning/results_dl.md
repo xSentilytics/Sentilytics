@@ -1,4 +1,4 @@
-# Rezultati: CNN i BiLSTM s fastText embeddingima
+# Rezultati: CNN i BiLSTM s fastText vektorima
  
 Za duboko učenje koristili smo TextCNN i BiLSTM. Modeli su trenirani na kombiniranom training skupu TRAIN-1234, a sloj vektorskih reprezentacija riječi inicijaliziran je hrvatskim fastText vektorima (cc.hr.300). Za rano zaustavljanje korišten je validacijski skup validation-1.
  
