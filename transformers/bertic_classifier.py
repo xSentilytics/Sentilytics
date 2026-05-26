@@ -1,17 +1,3 @@
-"""BERTić sentiment classifier (fine-tuning).
-
-Fine-tunes the Croatian-specific BERT-like model
-(`classla/bcms-bertic`) on the TRAIN-1234 sentiment dataset.
-Uses validation-1 for early stopping and evaluates on test-1..test-4.
-
-Standalone run:
-    python bertic_classifier.py
-
-Saves the fine-tuned checkpoint as `bertic_model.pt`. The checkpoint
-bundle contains: state_dict, label classes, max_len, and the HF model
-name — enough to recreate the architecture and run inference later.
-"""
-
 from pathlib import Path
 
 import numpy as np
@@ -25,9 +11,6 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_
 
 from evaluation import metrics_row, print_detail, print_summary
 
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
 HF_MODEL_NAME = "classla/bcms-bertic"
 NAME          = "BERTić (fine-tuned)"
 MAX_LEN       = 128
@@ -48,9 +31,6 @@ VAL_PATH   = DATA / "validation-1.csv"
 TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
 
-# ---------------------------------------------------------------------------
-# Dataset
-# ---------------------------------------------------------------------------
 class SentimentDataset(Dataset):
     """Tokenizes texts on the fly so we don't have to store giant tensors."""
 
@@ -86,9 +66,6 @@ def get_device():
     return torch.device("cpu")
 
 
-# ---------------------------------------------------------------------------
-# Training / evaluation
-# ---------------------------------------------------------------------------
 def train_epoch(model, loader, optimizer, scheduler, criterion, device):
     model.train()
     loss_sum, correct, n = 0.0, 0, 0
@@ -149,7 +126,6 @@ def main():
     if device.type == "cuda":
         print(f"GPU: {torch.cuda.get_device_name(0)}")
 
-    # ---- data ------------------------------------------------------------
     train_df = pd.read_csv(TRAIN_PATH)
     val_df   = pd.read_csv(VAL_PATH)
 
@@ -163,7 +139,6 @@ def main():
     num_classes = len(le.classes_)
     print(f"\nClasses: {list(le.classes_)} ({num_classes} total)")
 
-    # ---- tokenizer + model -----------------------------------------------
     print(f"\nLoading {HF_MODEL_NAME}...")
     tokenizer = AutoTokenizer.from_pretrained(HF_MODEL_NAME)
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -171,13 +146,11 @@ def main():
         num_labels=num_classes,
     ).to(device)
 
-    # ---- loaders ---------------------------------------------------------
     train_ds = SentimentDataset(train_df["text"].astype(str).values, y_train, tokenizer, MAX_LEN)
     val_ds   = SentimentDataset(val_df["text"].astype(str).values,   y_val,   tokenizer, MAX_LEN)
     train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
     val_loader   = DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
-    # ---- optimizer / scheduler / loss ------------------------------------
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=0.01)
     total_steps = len(train_loader) * EPOCHS
     scheduler = get_linear_schedule_with_warmup(
@@ -193,7 +166,6 @@ def main():
         weight=torch.tensor(class_weights, dtype=torch.float32).to(device)
     )
 
-    # ---- training loop with early stopping -------------------------------
     print(f"\nFine-tuning for up to {EPOCHS} epochs (patience={PATIENCE})...")
     best_val_loss = float("inf")
     best_state = None
@@ -219,7 +191,6 @@ def main():
     if best_state is not None:
         model.load_state_dict(best_state)
 
-    # ---- save bundle -----------------------------------------------------
     bundle = {
         "state_dict":    {k: v.cpu() for k, v in model.state_dict().items()},
         "hf_model_name": HF_MODEL_NAME,
@@ -230,7 +201,6 @@ def main():
     torch.save(bundle, MODEL_PATH)
     print(f"\nSaved model -> {MODEL_PATH}")
 
-    # ---- evaluate on each test set ---------------------------------------
     results = []
     for test_name, test_path in TEST_SETS.items():
         test_df = pd.read_csv(test_path)
