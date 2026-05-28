@@ -27,7 +27,7 @@ def train_model(
     lr=1e-3,
     class_weights=None,
     validation_split=0.1,
-    patience=3,
+    patience=5,
     grad_clip=None,
     seed=42,
 ):
@@ -72,7 +72,7 @@ def train_model(
         tr_loss_sum, tr_correct, tr_n = 0.0, 0, 0
         for xb, yb in train_loader:
             xb, yb = xb.to(device), yb.to(device)
-            optimizer.zero_grad(set_to_none=True)
+            optimizer.zero_grad()
             logits = model(xb)
             loss = criterion(logits, yb)
             loss.backward()

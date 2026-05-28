@@ -81,7 +81,7 @@ def main():
     train_model(
         cnn, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=15, batch_size=32,
+        device=device, epochs=20, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(CNN_MODEL_PATH, cnn, word2id, le.classes_, MAX_LEN,
@@ -96,7 +96,7 @@ def main():
     train_model(
         lstm, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=15, batch_size=32,
+        device=device, epochs=20, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(LSTM_MODEL_PATH, lstm, word2id, le.classes_, MAX_LEN,

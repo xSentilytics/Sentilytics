@@ -103,7 +103,7 @@ if __name__ == "__main__":
         model, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
         device=device,
-        epochs=15, batch_size=32,
+        epochs=20, batch_size=32,
         class_weights=class_weights,
     )
 
