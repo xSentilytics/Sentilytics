@@ -28,7 +28,7 @@ def train_model(
     class_weights=None,
     validation_split=0.1,
     patience=3,
-    grad_clip=5.0,
+    grad_clip=None,
     seed=42,
 ):
     if X_val is not None and y_val is not None:
