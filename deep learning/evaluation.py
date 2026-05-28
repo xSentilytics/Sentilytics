@@ -10,9 +10,9 @@ def metrics_row(test_name, model_name, y_true, y_pred):
         "test_set":  test_name,
         "model":     model_name,
         "accuracy":  accuracy_score(y_true, y_pred),
-        "precision": precision_score(y_true, y_pred, average="weighted", zero_division=0),
-        "recall":    recall_score(y_true, y_pred,    average="weighted", zero_division=0),
-        "f1":        f1_score(y_true, y_pred,        average="weighted", zero_division=0),
+        "precision": precision_score(y_true, y_pred, average="macro", zero_division=0),
+        "recall":    recall_score(y_true, y_pred,    average="macro", zero_division=0),
+        "f1":        f1_score(y_true, y_pred,        average="macro", zero_division=0),
     }
 
 
@@ -39,9 +39,9 @@ def print_summary(results):
     if df["model"].nunique() > 1:
         for metric, pretty in [
             ("accuracy",  "Accuracy"),
-            ("precision", "Precision (weighted)"),
-            ("recall",    "Recall (weighted)"),
-            ("f1",        "F1 (weighted)"),
+            ("precision", "Precision (macro)"),
+            ("recall",    "Recall (macro)"),
+            ("f1",        "F1 (macro)"),
         ]:
             pivot = df.pivot(index="test_set", columns="model", values=metric).round(4)
             print(f"\n{pretty} by test set:")
