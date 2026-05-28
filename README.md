@@ -113,7 +113,7 @@ Modeli se treniraju isključivo na kombiniranom training setu **TRAIN-1234**. Ka
 Pipeline je razdijeljen u sljedeće module:
 
 1. `embeddings.py`: tokenizacija hrvatskog teksta uz očuvanje dijakritika, izgradnja vokabulara i učitavanje fastText `.vec` datoteke. Iz cijele `.vec` datoteke zadržavaju se samo vektori za one riječi koje se pojavljuju u training setu.
-2. `pytorch_utils.py`: zajednička petlja za treniranje s class-weighted cross-entropy lossom, ranim zaustavljanjem (patience 3 na `val_loss`), automatskim odabirom uređaja (CUDA → Apple MPS → CPU) te funkcijama za spremanje i učitavanje modela.
+2. `pytorch_utils.py`: zajednička petlja za treniranje s class-weighted cross-entropy lossom, ranim zaustavljanjem (patience 3 na `val_loss`), rezanjem gradijenata (grad clip 5,0 — posebno važno za BiLSTM), automatskim odabirom uređaja (CUDA → Apple MPS → CPU) te funkcijama za spremanje i učitavanje modela.
 3. `cnn_classifier.py`: implementacija TextCNN arhitekture; sadrži klasu `TextCNN` i standalone runner.
 4. `lstm_classifier.py`: implementacija BiLSTM arhitekture; iste strukture kao CNN modul.
 5. `main_dl.py`: glavna skripta koja u jednom prolazu trenira oba modela, sprema ih i evaluira za sva četiri test seta.

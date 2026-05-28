@@ -31,8 +31,6 @@ def load_embedding_matrix(word2id, vec_path):
 
     vocab_size = len(word2id)
     matrix = np.zeros((vocab_size, EMBEDDING_DIM), dtype=np.float32)
-    found_mask = np.zeros(vocab_size, dtype=bool)
-    found_mask[0] = True  # PAD stays all-zeros (padding_idx convention)
     found = 0
 
     with io.open(vec_path, "r", encoding="utf-8", newline="\n", errors="ignore") as f:
@@ -48,19 +46,13 @@ def load_embedding_matrix(word2id, vec_path):
             if word in word2id and len(parts) >= EMBEDDING_DIM + 1:
                 try:
                     vec = np.asarray(parts[1:EMBEDDING_DIM + 1], dtype=np.float32)
-                    idx = word2id[word]
-                    matrix[idx] = vec
-                    found_mask[idx] = True
+                    matrix[word2id[word]] = vec
                     found += 1
                 except ValueError:
                     continue
 
-    # Random-initialize every in-vocab token not found in the embedding file
-    # (including <OOV>). This prevents them from having all-zero vectors,
-    # which are indistinguishable from the PAD token.
     rng = np.random.default_rng(seed=42)
-    unfound = ~found_mask
-    matrix[unfound] = rng.normal(0, 0.1, (unfound.sum(), EMBEDDING_DIM)).astype(np.float32)
+    matrix[1] = rng.normal(0, 0.1, EMBEDDING_DIM).astype(np.float32)
 
     covered = vocab_size - 2
     if covered > 0:

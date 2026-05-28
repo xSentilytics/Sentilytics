@@ -61,9 +61,6 @@ def train_model(
 
     criterion = nn.CrossEntropyLoss(weight=weight_tensor)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="min", factor=0.5, patience=2
-    )
 
     model.to(device)
     best_val_loss = float("inf")
@@ -105,8 +102,6 @@ def train_model(
         print(f"  Epoch {epoch:2d}/{epochs}  "
               f"train_loss={tr_loss:.4f} train_acc={tr_acc:.4f}  "
               f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}")
-
-        scheduler.step(val_loss)
 
         if val_loss < best_val_loss - 1e-4:
             best_val_loss = val_loss
