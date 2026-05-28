@@ -28,9 +28,9 @@ def train_model(
     class_weights=None,
     validation_split=0.1,
     patience=3,
+    grad_clip=5.0,
     seed=42,
 ):
-    
     if X_val is not None and y_val is not None:
         X_tr = torch.from_numpy(X_train).long()
         y_tr = torch.from_numpy(y_train).long()
@@ -61,6 +61,9 @@ def train_model(
 
     criterion = nn.CrossEntropyLoss(weight=weight_tensor)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode="min", factor=0.5, patience=2
+    )
 
     model.to(device)
     best_val_loss = float("inf")
@@ -72,10 +75,12 @@ def train_model(
         tr_loss_sum, tr_correct, tr_n = 0.0, 0, 0
         for xb, yb in train_loader:
             xb, yb = xb.to(device), yb.to(device)
-            optimizer.zero_grad()
+            optimizer.zero_grad(set_to_none=True)
             logits = model(xb)
             loss = criterion(logits, yb)
             loss.backward()
+            if grad_clip:
+                nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
             optimizer.step()
             tr_loss_sum += loss.item() * xb.size(0)
             tr_correct  += (logits.argmax(1) == yb).sum().item()
@@ -101,6 +106,8 @@ def train_model(
               f"train_loss={tr_loss:.4f} train_acc={tr_acc:.4f}  "
               f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}")
 
+        scheduler.step(val_loss)
+
         if val_loss < best_val_loss - 1e-4:
             best_val_loss = val_loss
             best_state = copy.deepcopy(model.state_dict())
@@ -119,12 +126,15 @@ def train_model(
 def predict(model, X, *, device, batch_size=64):
     model.eval()
     model.to(device)
-    X_t = torch.from_numpy(X).long()
+    loader = DataLoader(
+        TensorDataset(torch.from_numpy(X).long()),
+        batch_size=batch_size,
+        shuffle=False,
+    )
     preds = []
     with torch.no_grad():
-        for i in range(0, len(X_t), batch_size):
-            batch = X_t[i:i + batch_size].to(device)
-            logits = model(batch)
+        for (xb,) in loader:
+            logits = model(xb.to(device))
             preds.append(logits.argmax(1).cpu().numpy())
     return np.concatenate(preds) if preds else np.array([], dtype=np.int64)
 

@@ -61,7 +61,7 @@ if __name__ == "__main__":
     EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
     MODEL_PATH = HERE / "cnn_model.pt"
 
-    TRAIN_PATH = DATA / "train-1234.csv"
+    TRAIN_PATH = DATA / "TRAIN-1234.csv"
     VAL_PATH   = DATA / "validation-1.csv"
     TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 

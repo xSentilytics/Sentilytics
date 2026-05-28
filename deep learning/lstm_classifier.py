@@ -67,7 +67,7 @@ if __name__ == "__main__":
     EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
     MODEL_PATH = HERE / "lstm_model.pt"
 
-    TRAIN_PATH = DATA / "train-1234.csv"
+    TRAIN_PATH = DATA / "TRAIN-1234.csv"
     VAL_PATH   = DATA / "validation-1.csv"
     TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
@@ -92,7 +92,6 @@ if __name__ == "__main__":
 
     X_train_seq = texts_to_sequences(X_train_text, word2id, MAX_LEN)
 
-    # Held-out validation set
     val_df = pd.read_csv(VAL_PATH)
     y_val = le.transform(val_df["label"].astype(str).values)
     X_val_seq = texts_to_sequences(val_df["text"].astype(str).values, word2id, MAX_LEN)
