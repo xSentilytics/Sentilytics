@@ -5,7 +5,7 @@ NAME = "Linear SVM"
 
 
 def train(X_train, y_train):
-    clf = LinearSVC(C=1.0, random_state=RANDOM_STATE, max_iter=5000)
+    clf = LinearSVC(C=1.0, class_weight="balanced", random_state=RANDOM_STATE, max_iter=5000)
     clf.fit(X_train, y_train)
     return clf
 

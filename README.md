@@ -67,7 +67,18 @@ Nakon pilot faze cjelokupni je korpus označen istom 5-stupanjskom ljestvicom (n
 
 Nakon anotiranja korpusa, provedena je klasifikacija sentimenta primjenom dvaju klasičnih algoritama strojnog učenja: **metoda potpomognutih vektora (SVM)** i **K najbližih susjeda (KNN)**. Cilj je bio usporediti njihovu uspješnost na zadatku predviđanja sentimenta rečenica iz korpusa.
 
-Za izlučivanje značajki korišten je **TF-IDF** (Term Frequency - Inverse Document Frequency) iz biblioteke **scikit-learn**, uz unigrame i bigrame, `min_df = 2` i `sublinear_tf = True`.
+Za izlučivanje značajki korišten je **TF-IDF** (Term Frequency - Inverse Document Frequency) iz biblioteke **scikit-learn**, uz unigrame i bigrame te sljedeće parametre:
+
+| Parametar | Vrijednost | Obrazloženje |
+|---|---|---|
+| `ngram_range` | `(1, 2)` | unigrami i bigrami |
+| `min_df` | `2` | ignoriraju se tokeni koji se pojavljuju samo jednom |
+| `max_df` | `0.95` | ignoriraju se tokeni koji se pojavljuju u gotovo svim rečenicama |
+| `max_features` | `50000` | vokabular ograničen na najinformativnijih 50 000 tokena |
+| `sublinear_tf` | `True` | logaritamsko skaliranje frekvencije termina |
+| `strip_accents` | `None` | dijakritici se čuvaju (š, đ, č, ž, ć su zasebni tokeni) |
+
+LinearSVC se trenira s `class_weight="balanced"` kako bi se kompenzirala nejednaka distribucija klasa u korpusu: klase *positive* i *negative* znatno su češće od klasa *mixed* i *sarcastic* (omjer positive:sarcastic ≈ 81:1). KNN koristi kosinusnu udaljenost i `weights="distance"` što je prikladnije od euklidske za rijetke TF-IDF vektore.
 
 Cijeli pipeline razdijeljen je u nekoliko Python modula radi preglednosti i ponovne upotrebe:
 
@@ -75,7 +86,7 @@ Cijeli pipeline razdijeljen je u nekoliko Python modula radi preglednosti i pono
 2. `evaluation.py`: sadrži pomoćne funkcije za izračun metrika, ispis classification reporta i prikaz confusion matrixa.
 3. `svm_classifier.py`: implementacija linearnog SVM-a; sadrži `train()` funkciju i može se pokrenuti samostalno.
 4. `knn_classifier.py`: implementacija KNN-a (k = 7, kosinusna udaljenost); istog oblika kao SVM modul.
-5. `main.py`: glavna skripta koja na jednom training setu trenira oba modela, sprema ih i evaluira ih za sva četiri test seta.
+5. `main_ml.py`: glavna skripta koja na jednom training setu trenira oba modela, sprema ih i evaluira ih za sva četiri test seta.
 
 Za svaku kombinaciju (test set, model) program računa četiri metrike:
 
@@ -86,7 +97,7 @@ Za svaku kombinaciju (test set, model) program računa četiri metrike:
 
 Istrenirani modeli spremaju se u folder skripte kao .joblib datoteke (svm_model.joblib i knn_model.joblib). Svaka spremljena datoteka sadrži ne samo model nego i fittani TF-IDF vektorizator, popis klasa te oznaku tipa modela što je dovoljno za kasniju inferenciju bez ponovnog procesa treniranja ili fittanja vektorizatora.
 
-Ponderirani prosjek koristi se zbog nejednake distribucije klasa u korpusu (klase *mixed* i *sarcasm* zastupljene su rijetko). Rezultati se ispisuju u terminal i spremaju u datoteku `results_all.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results_ml.md`.
+Rezultati se ispisuju u terminal i spremaju u datoteku `results_ml.csv` u folderu skripte. Tablice s rezultatima nalaze se u datoteci `results_ml.md`.
 
 Potrebne biblioteke:
 ```bash

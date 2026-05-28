@@ -7,8 +7,9 @@ def build_vectorizer():
         ngram_range=(1, 2),
         min_df=2,
         max_df=0.95,
+        max_features=50000,
         sublinear_tf=True,
-        strip_accents="unicode",
+        strip_accents=None,
     )
 
 
