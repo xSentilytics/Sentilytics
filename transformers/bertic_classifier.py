@@ -7,9 +7,13 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
-from transformers import AutoTokenizer, AutoModelForSequenceClassification, get_linear_schedule_with_warmup
+from transformers import (
+    AutoTokenizer,
+    AutoModelForSequenceClassification,
+    get_linear_schedule_with_warmup,
+)
 
-from evaluation import metrics_row, print_detail, print_summary
+from evaluation import metrics_row, print_detail, print_qualitative, print_summary
 
 HF_MODEL_NAME = "classla/bcms-bertic"
 NAME          = "BERTić (fine-tuned)"
@@ -17,12 +21,13 @@ MAX_LEN       = 128
 BATCH_SIZE    = 16
 EPOCHS        = 4
 LEARNING_RATE = 2e-5
+WEIGHT_DECAY  = 0.01
 WARMUP_RATIO  = 0.1
+GRAD_CLIP     = 1.0
 PATIENCE      = 2
 SEED          = 42
 
-# Paths follow the same pattern as ML/DL scripts
-HERE = Path(__file__).parent              # .../machine learning (or deep learning)
+HERE = Path(__file__).parent
 DATA = HERE.parent / "korpus"
 MODEL_PATH = HERE / "bertic_model.pt"
 
@@ -32,8 +37,6 @@ TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
 
 class SentimentDataset(Dataset):
-    """Tokenizes texts on the fly so we don't have to store giant tensors."""
-
     def __init__(self, texts, labels, tokenizer, max_len):
         self.texts = texts
         self.labels = labels
@@ -78,8 +81,7 @@ def train_epoch(model, loader, optimizer, scheduler, criterion, device):
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
         loss = criterion(outputs.logits, labels)
         loss.backward()
-        # Gradient clipping is standard for BERT fine-tuning
-        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+        nn.utils.clip_grad_norm_(model.parameters(), max_norm=GRAD_CLIP)
         optimizer.step()
         scheduler.step()
 
@@ -148,10 +150,10 @@ def main():
 
     train_ds = SentimentDataset(train_df["text"].astype(str).values, y_train, tokenizer, MAX_LEN)
     val_ds   = SentimentDataset(val_df["text"].astype(str).values,   y_val,   tokenizer, MAX_LEN)
-    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_ds, batch_size=BATCH_SIZE, shuffle=True,  num_workers=2)
     val_loader   = DataLoader(val_ds,   batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
-    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=0.01)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
     total_steps = len(train_loader) * EPOCHS
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
@@ -159,7 +161,6 @@ def main():
         num_training_steps=total_steps,
     )
 
-    # Class-weighted loss for imbalanced labels (positive >> mixed/sarcastic)
     class_weights = compute_class_weight("balanced", classes=np.unique(y_train), y=y_train)
     print(f"Class weights: {dict(enumerate(class_weights.round(3)))}")
     criterion = nn.CrossEntropyLoss(
@@ -204,8 +205,6 @@ def main():
     results = []
     for test_name, test_path in TEST_SETS.items():
         test_df = pd.read_csv(test_path)
-        # If a test set contains labels unseen in training, LabelEncoder errors.
-        # Filter out any rows with such labels and warn.
         mask = test_df["label"].astype(str).isin(le.classes_)
         if not mask.all():
             unseen = sorted(set(test_df.loc[~mask, "label"].astype(str)))
@@ -213,10 +212,9 @@ def main():
             test_df = test_df[mask].reset_index(drop=True)
 
         y_test = le.transform(test_df["label"].astype(str).values)
+        texts  = test_df["text"].astype(str).values
 
-        test_ds = SentimentDataset(
-            test_df["text"].astype(str).values, y_test, tokenizer, MAX_LEN
-        )
+        test_ds = SentimentDataset(texts, y_test, tokenizer, MAX_LEN)
         test_loader = DataLoader(test_ds, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
         pred_ids   = predict(model, test_loader, device)
@@ -229,6 +227,7 @@ def main():
         print(test_df["label"].value_counts())
 
         print_detail(test_name, NAME, y_true_str, y_pred_str)
+        print_qualitative(test_name, NAME, texts, y_true_str, y_pred_str)
         results.append(metrics_row(test_name, NAME, y_true_str, y_pred_str))
 
     df = print_summary(results)
