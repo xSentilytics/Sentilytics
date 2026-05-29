@@ -62,6 +62,15 @@ def main():
     X_train_seq = texts_to_sequences(X_train_text, word2id, MAX_LEN)
     print(f"Encoded training shape: {X_train_seq.shape}")
 
+    # Compute class weights from the original distribution BEFORE oversampling.
+    # Computing after oversampling would double-correct for class imbalance
+    # (more minority examples + higher loss weight) and cause training collapse.
+    y_train_orig = le.transform(y_train_str)
+    class_weights = compute_class_weight(
+        "balanced", classes=np.unique(y_train_orig), y=y_train_orig
+    )
+    print(f"Class weights: {dict(enumerate(class_weights.round(3)))}")
+
     oversample_targets = {"mixed": 750, "sarcastic": 500}
     strategy = {
         cls: target
@@ -75,7 +84,7 @@ def main():
         counts = {cls: int(sum(y_train_str_resampled == cls)) for cls in sorted(set(y_train_str_resampled))}
         print(f"After oversampling: {X_train_seq.shape[0]} rows  {counts}")
     else:
-        y_train = le.transform(y_train_str)
+        y_train = y_train_orig
 
     val_df = pd.read_csv(VAL_PATH)
     X_val_text = val_df["text"].astype(str).values
@@ -83,11 +92,6 @@ def main():
     X_val_seq  = texts_to_sequences(X_val_text, word2id, MAX_LEN)
     print(f"\nValidation: {len(val_df)} rows from {VAL_PATH}")
     print(f"Encoded validation shape: {X_val_seq.shape}")
-
-    class_weights = compute_class_weight(
-        "balanced", classes=np.unique(y_train), y=y_train
-    )
-    print(f"Class weights: {dict(enumerate(class_weights.round(3)))}")
 
     print("\n" + "=" * 72)
     print(f"  Training {CNN_NAME}")
