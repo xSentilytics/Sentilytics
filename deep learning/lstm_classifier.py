@@ -90,6 +90,7 @@ if __name__ == "__main__":
 
     X_train_seq = texts_to_sequences(X_train_text, word2id, MAX_LEN)
 
+    # Held-out validation set
     val_df = pd.read_csv(VAL_PATH)
     y_val = le.transform(val_df["label"].astype(str).values)
     X_val_seq = texts_to_sequences(val_df["text"].astype(str).values, word2id, MAX_LEN)

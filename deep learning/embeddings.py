@@ -34,6 +34,7 @@ def load_embedding_matrix(word2id, vec_path):
     with io.open(vec_path, "r", encoding="utf-8", newline="\n", errors="ignore") as f:
         first_line = f.readline()
         parts = first_line.rstrip().split(" ")
+
         if len(parts) != 2:
             f.seek(0)
 
@@ -48,10 +49,13 @@ def load_embedding_matrix(word2id, vec_path):
                 except ValueError:
                     continue
 
+    # Random-initialize every in-vocab token not found in the embedding file
+    # (including <OOV>). This prevents them from having all-zero vectors,
+    # which are indistinguishable from the PAD token.
     rng = np.random.default_rng(seed=42)
     matrix[1] = rng.normal(0, 0.1, EMBEDDING_DIM).astype(np.float32)
 
-    covered = vocab_size - 2
+    covered = vocab_size - 2  
     if covered > 0:
         print(f"Embedding coverage: {found}/{covered} ({found / covered:.1%})")
     return matrix

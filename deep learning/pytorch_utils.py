@@ -30,6 +30,7 @@ def train_model(
     patience=3,
     seed=42,
 ):
+    
     if X_val is not None and y_val is not None:
         X_tr = torch.from_numpy(X_train).long()
         y_tr = torch.from_numpy(y_train).long()
