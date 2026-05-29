@@ -1,16 +1,31 @@
 
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.pipeline import FeatureUnion
+
 
 def build_vectorizer():
-    return TfidfVectorizer(
-        lowercase=True,
-        ngram_range=(1, 2),
-        min_df=2,
-        max_df=0.95,
-        max_features=50000,
-        sublinear_tf=True,
-        strip_accents=None,
-    )
+    return FeatureUnion([
+        ("word", TfidfVectorizer(
+            analyzer="word",
+            lowercase=True,
+            ngram_range=(1, 2),
+            min_df=2,
+            max_df=0.95,
+            max_features=50000,
+            sublinear_tf=True,
+            strip_accents=None,
+        )),
+        ("char", TfidfVectorizer(
+            analyzer="char_wb",
+            lowercase=True,
+            ngram_range=(3, 5),
+            min_df=3,
+            max_df=0.95,
+            max_features=30000,
+            sublinear_tf=True,
+            strip_accents=None,
+        )),
+    ])
 
 
 def fit_vectorizer(train_texts):
@@ -25,12 +40,13 @@ if __name__ == "__main__":
     from pathlib import Path
 
     HERE = Path(__file__).parent
-    DATA = HERE.parent / "korpus" 
+    DATA = HERE.parent / "korpus"
 
-    train_path = DATA / "TRAIN-1234.csv" 
+    train_path = DATA / "TRAIN-1234.csv"
     out_path   = HERE / "tfidf_vectorizer.joblib"
 
     df = pd.read_csv(train_path)
     vec = fit_vectorizer(df["text"].astype(str).values)
+    X = vec.transform(df["text"].astype(str).values)
     joblib.dump(vec, out_path)
-    print(f"Fit TF-IDF on {len(df)} rows | vocab={len(vec.vocabulary_)} | saved -> {out_path}")
+    print(f"Fit TF-IDF on {len(df)} rows | features={X.shape[1]} | saved -> {out_path}")

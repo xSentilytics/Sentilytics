@@ -39,7 +39,7 @@ if __name__ == "__main__":
     vec = fit_vectorizer(X_text)
     X_train = vec.transform(X_text)
     model = train(X_train, y_train)
-    print(f"  vocab={len(vec.vocabulary_)}, X_train={X_train.shape}")
+    print(f"  features={X_train.shape[1]}, X_train={X_train.shape}")
 
     results = []
     for name, path in TEST_SETS.items():

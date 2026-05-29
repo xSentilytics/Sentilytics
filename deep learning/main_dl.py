@@ -3,11 +3,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
+from imblearn.over_sampling import RandomOverSampler
 from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
 
 from embeddings import build_vocab, load_embedding_matrix, texts_to_sequences
-from evaluation import metrics_row, print_detail, print_summary
+from evaluation import metrics_row, print_detail, print_qualitative, print_summary
 from pytorch_utils import get_device, train_model, predict, save_bundle
 from cnn_classifier  import TextCNN, NAME as CNN_NAME
 from lstm_classifier import BiLSTM,  NAME as LSTM_NAME
@@ -28,7 +29,7 @@ TEST_SETS = {
     "test-4": DATA / "test-4.csv",
 }
 
-MAX_LEN = 50
+MAX_LEN = 100
 
 
 def main():
@@ -47,7 +48,7 @@ def main():
     print(train_df["label"].value_counts())
 
     le = LabelEncoder()
-    y_train = le.fit_transform(y_train_str)
+    le.fit(y_train_str)
     num_classes = len(le.classes_)
     print(f"\nClasses: {list(le.classes_)} ({num_classes} total)")
 
@@ -60,6 +61,21 @@ def main():
 
     X_train_seq = texts_to_sequences(X_train_text, word2id, MAX_LEN)
     print(f"Encoded training shape: {X_train_seq.shape}")
+
+    oversample_targets = {"mixed": 750, "sarcastic": 500}
+    strategy = {
+        cls: target
+        for cls, target in oversample_targets.items()
+        if cls in set(y_train_str) and sum(y_train_str == cls) < target
+    }
+    if strategy:
+        ros = RandomOverSampler(sampling_strategy=strategy, random_state=42)
+        X_train_seq, y_train_str_resampled = ros.fit_resample(X_train_seq, y_train_str)
+        y_train = le.transform(y_train_str_resampled)
+        counts = {cls: int(sum(y_train_str_resampled == cls)) for cls in sorted(set(y_train_str_resampled))}
+        print(f"After oversampling: {X_train_seq.shape[0]} rows  {counts}")
+    else:
+        y_train = le.transform(y_train_str)
 
     val_df = pd.read_csv(VAL_PATH)
     X_val_text = val_df["text"].astype(str).values
@@ -81,7 +97,7 @@ def main():
     train_model(
         cnn, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=20, batch_size=32,
+        device=device, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(CNN_MODEL_PATH, cnn, word2id, le.classes_, MAX_LEN,
@@ -96,7 +112,7 @@ def main():
     train_model(
         lstm, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=20, batch_size=32,
+        device=device, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(LSTM_MODEL_PATH, lstm, word2id, le.classes_, MAX_LEN,
@@ -122,10 +138,12 @@ def main():
         print("Label distribution:")
         print(test_df["label"].value_counts())
 
+        texts = test_df["text"].astype(str).values
         for model_name, model in models:
             pred_ids = predict(model, X_test_seq, device=device)
             y_pred_str = le.classes_[pred_ids]
             print_detail(test_name, model_name, y_test_str, y_pred_str)
+            print_qualitative(test_name, model_name, texts, y_test_str, y_pred_str)
             results.append(metrics_row(test_name, model_name, y_test_str, y_pred_str))
 
     df = print_summary(results)
