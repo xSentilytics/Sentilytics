@@ -7,15 +7,12 @@ from sklearn.metrics import (
 
 def metrics_row(test_name, model_name, y_true, y_pred):
     return {
-        "test_set":           test_name,
-        "model":              model_name,
-        "accuracy":           accuracy_score(y_true, y_pred),
-        "precision_weighted": precision_score(y_true, y_pred, average="weighted", zero_division=0),
-        "recall_weighted":    recall_score(y_true, y_pred,    average="weighted", zero_division=0),
-        "f1_weighted":        f1_score(y_true, y_pred,        average="weighted", zero_division=0),
-        "precision_macro":    precision_score(y_true, y_pred, average="macro",    zero_division=0),
-        "recall_macro":       recall_score(y_true, y_pred,    average="macro",    zero_division=0),
-        "f1_macro":           f1_score(y_true, y_pred,        average="macro",    zero_division=0),
+        "test_set":  test_name,
+        "model":     model_name,
+        "accuracy":  accuracy_score(y_true, y_pred),
+        "precision": precision_score(y_true, y_pred, average="weighted", zero_division=0),
+        "recall":    recall_score(y_true, y_pred,    average="weighted", zero_division=0),
+        "f1":        f1_score(y_true, y_pred,        average="weighted", zero_division=0),
     }
 
 
@@ -32,21 +29,6 @@ def print_detail(test_name, model_name, y_true, y_pred):
         print(f"  {lbl[:7]:>7} " + "  ".join(f"{v:>7d}" for v in row))
 
 
-def print_qualitative(test_name, model_name, texts, y_true, y_pred, n=5):
-    df = pd.DataFrame({"text": texts, "true": y_true, "pred": y_pred})
-    errors = df[df["true"] != df["pred"]]
-
-    print("\n" + "-" * 72)
-    print(f"  Qualitative analysis: {test_name}  |  {model_name}")
-    print(f"  Errors: {len(errors)} / {len(df)} ({len(errors) / len(df) * 100:.1f}%)")
-    print("-" * 72)
-
-    for (true_lbl, pred_lbl), group in errors.groupby(["true", "pred"]):
-        print(f"\n  true={true_lbl} → pred={pred_lbl}  ({len(group)} cases)")
-        for text in group["text"].head(n):
-            print(f"    • {text[:120]}")
-
-
 def print_summary(results):
     df = pd.DataFrame(results)
     print("\n\n" + "=" * 78)
@@ -56,13 +38,10 @@ def print_summary(results):
 
     if df["model"].nunique() > 1:
         for metric, pretty in [
-            ("accuracy",           "Accuracy"),
-            ("precision_weighted", "Precision (weighted)"),
-            ("recall_weighted",    "Recall (weighted)"),
-            ("f1_weighted",        "F1 (weighted)"),
-            ("precision_macro",    "Precision (macro)"),
-            ("recall_macro",       "Recall (macro)"),
-            ("f1_macro",           "F1 (macro)"),
+            ("accuracy",  "Accuracy"),
+            ("precision", "Precision (weighted)"),
+            ("recall",    "Recall (weighted)"),
+            ("f1",        "F1 (weighted)"),
         ]:
             pivot = df.pivot(index="test_set", columns="model", values=metric).round(4)
             print(f"\n{pretty} by test set:")

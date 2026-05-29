@@ -22,14 +22,13 @@ def train_model(
     device,
     X_val=None,
     y_val=None,
-    epochs=30,
+    epochs=15,
     batch_size=32,
     lr=1e-3,
     class_weights=None,
     validation_split=0.1,
-    patience=7,
-    grad_clip=5.0,
-    freeze_embedding_epochs=3,
+    patience=5,
+    grad_clip=None,
     seed=42,
 ):
     if X_val is not None and y_val is not None:
@@ -62,15 +61,6 @@ def train_model(
 
     criterion = nn.CrossEntropyLoss(weight=weight_tensor)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="min", factor=0.5, patience=3, min_lr=1e-5
-    )
-
-    # Freeze pre-trained embeddings for the first N epochs
-    emb_layer = getattr(model, "embedding", None)
-    if emb_layer is not None and freeze_embedding_epochs > 0:
-        emb_layer.weight.requires_grad_(False)
-        print(f"  Embeddings frozen for first {freeze_embedding_epochs} epoch(s)")
 
     model.to(device)
     best_val_loss = float("inf")
@@ -78,10 +68,6 @@ def train_model(
     bad_epochs = 0
 
     for epoch in range(1, epochs + 1):
-        if emb_layer is not None and epoch == freeze_embedding_epochs + 1:
-            emb_layer.weight.requires_grad_(True)
-            print(f"  Embeddings unfrozen at epoch {epoch}")
-
         model.train()
         tr_loss_sum, tr_correct, tr_n = 0.0, 0, 0
         for xb, yb in train_loader:
@@ -112,13 +98,10 @@ def train_model(
         tr_acc   = tr_correct   / tr_n
         val_loss = val_loss_sum / val_n
         val_acc  = val_correct  / val_n
-        current_lr = optimizer.param_groups[0]["lr"]
 
         print(f"  Epoch {epoch:2d}/{epochs}  "
               f"train_loss={tr_loss:.4f} train_acc={tr_acc:.4f}  "
-              f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}  lr={current_lr:.2e}")
-
-        scheduler.step(val_loss)
+              f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}")
 
         if val_loss < best_val_loss - 1e-4:
             best_val_loss = val_loss

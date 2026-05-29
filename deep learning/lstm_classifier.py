@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 NAME = "BiLSTM (fastText hr)"
-MAX_LEN = 100
+MAX_LEN = 50
 EMBEDDING_DIM = 300
 LSTM_UNITS = 128
 SPATIAL_DROPOUT = 0.3
