@@ -16,18 +16,18 @@ from trl import SFTTrainer, SFTConfig
 
 from evaluation import metrics_row, print_detail, print_qualitative, print_summary
 
-BASE_MODEL    = "utter-project/EuroLLM-9B-Instruct"
-NAME          = "EuroLLM-9B-Instruct (IFT)"
+BASE_MODEL    = "utter-project/EuroLLM-1.7B-Instruct"
+NAME          = "EuroLLM-1.7B-Instruct (IFT)"
 MAX_SEQ_LEN   = 512
 LORA_RANK     = 8
 LORA_ALPHA    = 16
-BATCH_SIZE    = 8
-GRAD_ACCUM    = 4
+BATCH_SIZE    = 32
+GRAD_ACCUM    = 1
 EPOCHS        = 3
 LEARNING_RATE = 2e-4
 WARMUP_RATIO  = 0.03
 SEED          = 42
-USE_4BIT      = True
+USE_4BIT      = False
 
 HERE = Path(__file__).parent
 DATA = HERE.parent / "korpus"
