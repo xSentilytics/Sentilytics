@@ -15,7 +15,6 @@ def tokenize(text: str) -> list:
 
 
 def build_vocab(texts, min_freq=1, max_vocab=50000):
-
     counter = Counter()
     for t in texts:
         counter.update(tokenize(t))
@@ -28,7 +27,6 @@ def build_vocab(texts, min_freq=1, max_vocab=50000):
 
 
 def load_embedding_matrix(word2id, vec_path):
-
     vocab_size = len(word2id)
     matrix = np.zeros((vocab_size, EMBEDDING_DIM), dtype=np.float32)
     found = 0
@@ -36,7 +34,6 @@ def load_embedding_matrix(word2id, vec_path):
     with io.open(vec_path, "r", encoding="utf-8", newline="\n", errors="ignore") as f:
         first_line = f.readline()
         parts = first_line.rstrip().split(" ")
-
         if len(parts) != 2:
             f.seek(0)
 

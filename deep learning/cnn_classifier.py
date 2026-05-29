@@ -30,16 +30,16 @@ class TextCNN(nn.Module):
         self.fc = nn.Linear(num_filters * len(kernel_sizes), num_classes)
 
     def forward(self, x):
-        emb = self.embedding(x)             
-        emb = emb.transpose(1, 2)           
+        emb = self.embedding(x)
+        emb = emb.transpose(1, 2)
 
         pooled = []
         for conv in self.convs:
-            c = F.relu(conv(emb))          
-            p = F.max_pool1d(c, c.size(2)) 
-            pooled.append(p.squeeze(2))     
+            c = F.relu(conv(emb))
+            p = F.max_pool1d(c, c.size(2))
+            pooled.append(p.squeeze(2))
 
-        cat = torch.cat(pooled, dim=1)      
+        cat = torch.cat(pooled, dim=1)
         return self.fc(self.dropout(cat))
 
 
@@ -61,7 +61,7 @@ if __name__ == "__main__":
     EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
     MODEL_PATH = HERE / "cnn_model.pt"
 
-    TRAIN_PATH = DATA / "TRAIN-1234.csv"
+    TRAIN_PATH = DATA / "train-1234.csv"
     VAL_PATH   = DATA / "validation-1.csv"
     TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         model, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
         device=device,
-        epochs=20, batch_size=32,
+        epochs=15, batch_size=32,
         class_weights=class_weights,
     )
 

@@ -12,14 +12,15 @@ from pytorch_utils import get_device, train_model, predict, save_bundle
 from cnn_classifier  import TextCNN, NAME as CNN_NAME
 from lstm_classifier import BiLSTM,  NAME as LSTM_NAME
 
-HERE = Path(__file__).parent              
-DATA = HERE.parent / "korpus"             
+
+HERE = Path(__file__).parent              # .../machine learning
+DATA = HERE.parent / "korpus"             # .../korpus
 EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
 
 CNN_MODEL_PATH  = HERE / "cnn_model.pt"
 LSTM_MODEL_PATH = HERE / "lstm_model.pt"
 
-TRAIN_PATH = DATA / "TRAIN-1234.csv"
+TRAIN_PATH = DATA / "train-1234.csv"
 VAL_PATH   = DATA / "validation-1.csv"
 TEST_SETS = {
     "test-1": DATA / "test-1.csv",
@@ -32,6 +33,7 @@ MAX_LEN = 50
 
 
 def main():
+    # Reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
 
@@ -81,7 +83,7 @@ def main():
     train_model(
         cnn, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=20, batch_size=32,
+        device=device, epochs=15, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(CNN_MODEL_PATH, cnn, word2id, le.classes_, MAX_LEN,
@@ -96,7 +98,7 @@ def main():
     train_model(
         lstm, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=20, batch_size=32,
+        device=device, epochs=15, batch_size=32,
         class_weights=class_weights,
     )
     save_bundle(LSTM_MODEL_PATH, lstm, word2id, le.classes_, MAX_LEN,

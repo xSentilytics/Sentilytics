@@ -1,12 +1,11 @@
 import numpy as np
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 NAME = "BiLSTM (fastText hr)"
 MAX_LEN = 50
 EMBEDDING_DIM = 300
-LSTM_UNITS = 128
+LSTM_UNITS = 64
 SPATIAL_DROPOUT = 0.3
 DROPOUT = 0.5
 
@@ -33,25 +32,19 @@ class BiLSTM(nn.Module):
             bidirectional=True,
             dropout=0.0,
         )
-        self.attn = nn.Linear(lstm_units * 2, 1)
         self.dropout = nn.Dropout(dropout)
         self.fc = nn.Linear(lstm_units * 2, num_classes)
 
     def forward(self, x):
-        emb = self.embedding(x)              # (batch, seq, emb_dim)
+        emb = self.embedding(x)
 
-        emb = emb.transpose(1, 2)            # (batch, emb_dim, seq)
+        emb = emb.transpose(1, 2)
         emb = self.spatial_dropout(emb)
-        emb = emb.transpose(1, 2)            # (batch, seq, emb_dim)
+        emb = emb.transpose(1, 2)
 
-        out, _ = self.lstm(emb)              # (batch, seq, lstm_units*2)
-
-        attn_scores = self.attn(out).squeeze(-1)                        # (batch, seq)
-        attn_scores = attn_scores.masked_fill(x == self.padding_idx, float("-inf"))
-        attn_weights = F.softmax(attn_scores, dim=1)                    # (batch, seq)
-        context = (out * attn_weights.unsqueeze(-1)).sum(dim=1)         # (batch, lstm_units*2)
-
-        return self.fc(self.dropout(context))
+        _, (h, _) = self.lstm(emb)
+        h = torch.cat([h[-2], h[-1]], dim=1)
+        return self.fc(self.dropout(h))
 
 
 if __name__ == "__main__":
@@ -72,7 +65,7 @@ if __name__ == "__main__":
     EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
     MODEL_PATH = HERE / "lstm_model.pt"
 
-    TRAIN_PATH = DATA / "TRAIN-1234.csv"
+    TRAIN_PATH = DATA / "train-1234.csv"
     VAL_PATH   = DATA / "validation-1.csv"
     TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
@@ -114,7 +107,7 @@ if __name__ == "__main__":
         model, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
         device=device,
-        epochs=20, batch_size=32,
+        epochs=15, batch_size=32,
         class_weights=class_weights,
     )
 

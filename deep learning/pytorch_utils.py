@@ -27,8 +27,7 @@ def train_model(
     lr=1e-3,
     class_weights=None,
     validation_split=0.1,
-    patience=5,
-    grad_clip=None,
+    patience=3,
     seed=42,
 ):
     if X_val is not None and y_val is not None:
@@ -76,8 +75,6 @@ def train_model(
             logits = model(xb)
             loss = criterion(logits, yb)
             loss.backward()
-            if grad_clip:
-                nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
             optimizer.step()
             tr_loss_sum += loss.item() * xb.size(0)
             tr_correct  += (logits.argmax(1) == yb).sum().item()
@@ -121,15 +118,12 @@ def train_model(
 def predict(model, X, *, device, batch_size=64):
     model.eval()
     model.to(device)
-    loader = DataLoader(
-        TensorDataset(torch.from_numpy(X).long()),
-        batch_size=batch_size,
-        shuffle=False,
-    )
+    X_t = torch.from_numpy(X).long()
     preds = []
     with torch.no_grad():
-        for (xb,) in loader:
-            logits = model(xb.to(device))
+        for i in range(0, len(X_t), batch_size):
+            batch = X_t[i:i + batch_size].to(device)
+            logits = model(batch)
             preds.append(logits.argmax(1).cpu().numpy())
     return np.concatenate(preds) if preds else np.array([], dtype=np.int64)
 
