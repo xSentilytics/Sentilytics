@@ -1,11 +1,12 @@
 import numpy as np
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 NAME = "BiLSTM (fastText hr)"
-MAX_LEN = 50
+MAX_LEN = 80
 EMBEDDING_DIM = 300
-LSTM_UNITS = 64
+LSTM_UNITS = 96
 SPATIAL_DROPOUT = 0.3
 DROPOUT = 0.5
 
@@ -30,21 +31,29 @@ class BiLSTM(nn.Module):
             num_layers=1,
             batch_first=True,
             bidirectional=True,
-            dropout=0.0,
         )
+        self.attn = nn.Linear(lstm_units * 2, 1)
         self.dropout = nn.Dropout(dropout)
         self.fc = nn.Linear(lstm_units * 2, num_classes)
 
     def forward(self, x):
-        emb = self.embedding(x)
+        emb = self.embedding(x)                          # (B, L, E)
 
         emb = emb.transpose(1, 2)
         emb = self.spatial_dropout(emb)
         emb = emb.transpose(1, 2)
 
-        _, (h, _) = self.lstm(emb)
-        h = torch.cat([h[-2], h[-1]], dim=1)
-        return self.fc(self.dropout(h))
+        out, _ = self.lstm(emb)                          # (B, L, 2H)
+
+        scores = self.attn(out).squeeze(-1)              # (B, L)
+        mask = (x == self.padding_idx)
+        # Keep at least position 0 unmasked so an all-PAD row doesn't softmax to NaN.
+        mask[:, 0] = False
+        scores = scores.masked_fill(mask, float("-inf"))
+        weights = F.softmax(scores, dim=1).unsqueeze(-1) # (B, L, 1)
+        context = (out * weights).sum(dim=1)             # (B, 2H)
+
+        return self.fc(self.dropout(context))
 
 
 if __name__ == "__main__":
@@ -65,7 +74,7 @@ if __name__ == "__main__":
     EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
     MODEL_PATH = HERE / "lstm_model.pt"
 
-    TRAIN_PATH = DATA / "train-1234.csv"
+    TRAIN_PATH = DATA / "TRAIN-1234.csv"
     VAL_PATH   = DATA / "validation-1.csv"
     TEST_SETS = {f"test-{i}": DATA / f"test-{i}.csv" for i in range(1, 5)}
 
@@ -81,52 +90,35 @@ if __name__ == "__main__":
     num_classes = len(le.classes_)
     print(f"Classes: {list(le.classes_)} ({num_classes} total)")
 
-    print("Building vocabulary...")
     word2id = build_vocab(X_train_text)
-    print(f"Vocab size: {len(word2id)}")
-
-    print(f"Loading embeddings from {EMB_PATH}...")
     embedding_matrix = load_embedding_matrix(word2id, EMB_PATH)
-
     X_train_seq = texts_to_sequences(X_train_text, word2id, MAX_LEN)
 
-    # Held-out validation set
     val_df = pd.read_csv(VAL_PATH)
     y_val = le.transform(val_df["label"].astype(str).values)
     X_val_seq = texts_to_sequences(val_df["text"].astype(str).values, word2id, MAX_LEN)
-    print(f"Validation: {len(val_df)} rows")
 
     class_weights = compute_class_weight(
         "balanced", classes=np.unique(y_train), y=y_train
     )
-    print(f"Class weights: {dict(enumerate(class_weights.round(3)))}")
 
-    print(f"\nTraining {NAME} on {len(train_df)} rows...")
     model = BiLSTM(len(word2id), num_classes, embedding_matrix)
     print(model)
     train_model(
         model, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device,
-        epochs=15, batch_size=32,
-        class_weights=class_weights,
+        device=device, class_weights=class_weights,
     )
-
     save_bundle(MODEL_PATH, model, word2id, le.classes_, MAX_LEN,
                 extra={"model_type": "BiLSTM"})
-    print(f"\nSaved model to {MODEL_PATH}")
 
     results = []
     for name, path in TEST_SETS.items():
         df = pd.read_csv(path)
-        X_test_seq = texts_to_sequences(
-            df["text"].astype(str).values, word2id, MAX_LEN
-        )
+        X_test_seq = texts_to_sequences(df["text"].astype(str).values, word2id, MAX_LEN)
         y_test_str = df["label"].astype(str).values
-
         pred_ids = predict(model, X_test_seq, device=device)
         y_pred_str = le.classes_[pred_ids]
-
         print_detail(name, NAME, y_test_str, y_pred_str)
         results.append(metrics_row(name, NAME, y_test_str, y_pred_str))
 

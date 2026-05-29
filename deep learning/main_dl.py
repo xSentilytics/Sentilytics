@@ -12,15 +12,14 @@ from pytorch_utils import get_device, train_model, predict, save_bundle
 from cnn_classifier  import TextCNN, NAME as CNN_NAME
 from lstm_classifier import BiLSTM,  NAME as LSTM_NAME
 
-
-HERE = Path(__file__).parent              # .../machine learning
-DATA = HERE.parent / "korpus"             # .../korpus
+HERE = Path(__file__).parent
+DATA = HERE.parent / "korpus"
 EMB_PATH = HERE.parent / "embeddings" / "cc.hr.300.vec"
 
 CNN_MODEL_PATH  = HERE / "cnn_model.pt"
 LSTM_MODEL_PATH = HERE / "lstm_model.pt"
 
-TRAIN_PATH = DATA / "train-1234.csv"
+TRAIN_PATH = DATA / "TRAIN-1234.csv"
 VAL_PATH   = DATA / "validation-1.csv"
 TEST_SETS = {
     "test-1": DATA / "test-1.csv",
@@ -29,11 +28,12 @@ TEST_SETS = {
     "test-4": DATA / "test-4.csv",
 }
 
-MAX_LEN = 50
+MAX_LEN = 80
+TEXT_COL  = "text"
+LABEL_COL = "label"
 
 
 def main():
-    # Reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
 
@@ -41,12 +41,11 @@ def main():
     print(f"Device: {device}")
 
     train_df = pd.read_csv(TRAIN_PATH)
-    X_train_text = train_df["text"].astype(str).values
-    y_train_str  = train_df["label"].astype(str).values
+    X_train_text = train_df[TEXT_COL].astype(str).values
+    y_train_str  = train_df[LABEL_COL].astype(str).values
 
     print(f"\nTrain: {len(train_df)} rows from {TRAIN_PATH}")
-    print("Train label distribution:")
-    print(train_df["label"].value_counts())
+    print(train_df[LABEL_COL].value_counts())
 
     le = LabelEncoder()
     y_train = le.fit_transform(y_train_str)
@@ -64,8 +63,8 @@ def main():
     print(f"Encoded training shape: {X_train_seq.shape}")
 
     val_df = pd.read_csv(VAL_PATH)
-    X_val_text = val_df["text"].astype(str).values
-    y_val      = le.transform(val_df["label"].astype(str).values)
+    X_val_text = val_df[TEXT_COL].astype(str).values
+    y_val      = le.transform(val_df[LABEL_COL].astype(str).values)
     X_val_seq  = texts_to_sequences(X_val_text, word2id, MAX_LEN)
     print(f"\nValidation: {len(val_df)} rows from {VAL_PATH}")
     print(f"Encoded validation shape: {X_val_seq.shape}")
@@ -83,8 +82,7 @@ def main():
     train_model(
         cnn, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=15, batch_size=32,
-        class_weights=class_weights,
+        device=device, class_weights=class_weights,
     )
     save_bundle(CNN_MODEL_PATH, cnn, word2id, le.classes_, MAX_LEN,
                 extra={"model_type": "TextCNN"})
@@ -98,8 +96,7 @@ def main():
     train_model(
         lstm, X_train_seq, y_train,
         X_val=X_val_seq, y_val=y_val,
-        device=device, epochs=15, batch_size=32,
-        class_weights=class_weights,
+        device=device, class_weights=class_weights,
     )
     save_bundle(LSTM_MODEL_PATH, lstm, word2id, le.classes_, MAX_LEN,
                 extra={"model_type": "BiLSTM"})
@@ -113,18 +110,15 @@ def main():
     results = []
     for test_name, test_path in TEST_SETS.items():
         test_df = pd.read_csv(test_path)
-        X_test_seq = texts_to_sequences(
-            test_df["text"].astype(str).values, word2id, MAX_LEN
-        )
-        y_test_str = test_df["label"].astype(str).values
+        texts = test_df[TEXT_COL].astype(str).values
+        X_test_seq = texts_to_sequences(texts, word2id, MAX_LEN)
+        y_test_str = test_df[LABEL_COL].astype(str).values
 
         print(f"\n\n{'#' * 72}")
         print(f"#  Test set: {test_name}  ({len(test_df)} rows from {test_path})")
         print(f"{'#' * 72}")
-        print("Label distribution:")
-        print(test_df["label"].value_counts())
+        print(test_df[LABEL_COL].value_counts())
 
-        texts = test_df["text"].astype(str).values
         for model_name, model in models:
             pred_ids = predict(model, X_test_seq, device=device)
             y_pred_str = le.classes_[pred_ids]

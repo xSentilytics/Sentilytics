@@ -22,15 +22,16 @@ def train_model(
     device,
     X_val=None,
     y_val=None,
-    epochs=15,
+    epochs=25,
     batch_size=32,
     lr=1e-3,
+    weight_decay=1e-5,
     class_weights=None,
     validation_split=0.1,
-    patience=3,
+    patience=5,
+    grad_clip=5.0,
     seed=42,
 ):
-    
     if X_val is not None and y_val is not None:
         X_tr = torch.from_numpy(X_train).long()
         y_tr = torch.from_numpy(y_train).long()
@@ -60,7 +61,10 @@ def train_model(
         weight_tensor = torch.tensor(class_weights, dtype=torch.float32).to(device)
 
     criterion = nn.CrossEntropyLoss(weight=weight_tensor)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode="min", factor=0.5, patience=2, min_lr=1e-5,
+    )
 
     model.to(device)
     best_val_loss = float("inf")
@@ -76,6 +80,8 @@ def train_model(
             logits = model(xb)
             loss = criterion(logits, yb)
             loss.backward()
+            if grad_clip:
+                nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
             optimizer.step()
             tr_loss_sum += loss.item() * xb.size(0)
             tr_correct  += (logits.argmax(1) == yb).sum().item()
@@ -96,10 +102,13 @@ def train_model(
         tr_acc   = tr_correct   / tr_n
         val_loss = val_loss_sum / val_n
         val_acc  = val_correct  / val_n
+        cur_lr   = optimizer.param_groups[0]["lr"]
 
         print(f"  Epoch {epoch:2d}/{epochs}  "
               f"train_loss={tr_loss:.4f} train_acc={tr_acc:.4f}  "
-              f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}")
+              f"val_loss={val_loss:.4f} val_acc={val_acc:.4f}  lr={cur_lr:.1e}")
+
+        scheduler.step(val_loss)
 
         if val_loss < best_val_loss - 1e-4:
             best_val_loss = val_loss
