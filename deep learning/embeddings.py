@@ -61,10 +61,12 @@ def load_embedding_matrix(word2id, vec_path):
 
 
 def texts_to_sequences(texts, word2id, max_len):
-
     sequences = np.zeros((len(texts), max_len), dtype=np.int32)
     for i, t in enumerate(texts):
         tokens = tokenize(t)[:max_len]
-        for j, tok in enumerate(tokens):
-            sequences[i, j] = word2id.get(tok, 1)
+        if not tokens:
+            sequences[i, 0] = 1  # OOV sentinel — prevents all-PAD sequences that cause NaN in attention
+        else:
+            for j, tok in enumerate(tokens):
+                sequences[i, j] = word2id.get(tok, 1)
     return sequences
