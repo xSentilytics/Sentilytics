@@ -7,7 +7,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.utils.class_weight import compute_class_weight
 
 from embeddings import build_vocab, load_embedding_matrix, texts_to_sequences
-from evaluation import metrics_row, print_detail, print_summary
+from evaluation import metrics_row, print_detail, print_qualitative, print_summary
 from pytorch_utils import get_device, train_model, predict, save_bundle
 from cnn_classifier  import TextCNN, NAME as CNN_NAME
 from lstm_classifier import BiLSTM,  NAME as LSTM_NAME
@@ -122,10 +122,12 @@ def main():
         print("Label distribution:")
         print(test_df["label"].value_counts())
 
+        texts = test_df["text"].astype(str).values
         for model_name, model in models:
             pred_ids = predict(model, X_test_seq, device=device)
             y_pred_str = le.classes_[pred_ids]
             print_detail(test_name, model_name, y_test_str, y_pred_str)
+            print_qualitative(test_name, model_name, texts, y_test_str, y_pred_str)
             results.append(metrics_row(test_name, model_name, y_test_str, y_pred_str))
 
     df = print_summary(results)
