@@ -49,6 +49,7 @@ Za svaku rečenicu zapisuje se:
 4. redni broj komentara (review_id)
 5. redni broj rečenice unutar komentara (sentence_id)
 6. tekst rečenice
+
 Prilikom pokretanja programa korisnik mora unijeti **naziv .xlsx datoteke** u koju će se spremiti rečenice (bez nastavka `.xlsx`).
  
 Program zatim:
