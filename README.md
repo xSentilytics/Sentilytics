@@ -70,6 +70,7 @@ Sentiment se određuje prema **5-stupanjskoj ljestvici**:
 3. `positive`: pozitivan sentiment
 4. `mixed`: dio rečenice je pozitivan, a dio negativan
 5. `sarcastic`: sarkastični i ironični komentari
+
 Iz prikupljenog korpusa nasumično je odabrano 150 rečenica koje su činile skup za anotaciju. Svi članovi grupe dobili su istovjetnu verziju podataka, uključujući izvorne stupce, tekst i dodatni stupac predviđen za oznake.
 Anotacija je provedena pojedinačno, pri čemu je svaki član grupe samostalno označio svih 150 rečenica prema definiranoj ljestvici. Nakon završetka pojedinačnog rada uslijedila je zajednička analiza rezultata. Pomoću biblioteka **Pandas** i **statsmodels** izračunali smo **Cohenov kappa koeficijent** (engl. *Cohen's kappa coefficient*), koji pokazuje stupanj slaganja među anotatorima. U našem slučaju vrijednost iznosi **0,76**, što upućuje na pouzdano slaganje među anotatorima.
  
