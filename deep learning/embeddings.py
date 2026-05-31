@@ -51,8 +51,7 @@ def load_embedding_matrix(word2id, vec_path):
                     continue
 
     rng = np.random.default_rng(seed=42)
-    # Random-init every in-vocab token that wasn't in the embedding file,
-    # so they remain distinguishable from PAD (which stays at zeros).
+
     for word, idx in word2id.items():
         if idx == PAD_ID:
             continue
@@ -70,7 +69,7 @@ def texts_to_sequences(texts, word2id, max_len):
     for i, t in enumerate(texts):
         tokens = tokenize(t)[:max_len]
         if not tokens:
-            sequences[i, 0] = OOV_ID  # prevents all-PAD rows (NaN in masked attention)
+            sequences[i, 0] = OOV_ID  
             continue
         for j, tok in enumerate(tokens):
             sequences[i, j] = word2id.get(tok, OOV_ID)

@@ -1,14 +1,5 @@
 # Rezultati: SVM i KNN s TF-IDF
 
-## TRAIN-1234 (sve grupe zajedno)
-
-Optimizacije:
-- `strip_accents=None` — čuvaju se hrvatska dijakritička slova (š, đ, č, ž, ć) umjesto da se svode na latiničnu bazu
-- `max_features=50000` (word) + `max_features=30000` (char) — kombinacija word unigramnih/bigramnih i znakovnih (3–5) n-grama pomoću `FeatureUnion`; znakovni n-grami poboljšavaju generalizaciju na morfološki bogatom hrvatskom jeziku
-- `class_weight="balanced"` (LinearSVC) — penalizacija proporcionalna frekvenciji klase, kompenzira nebalansiranost skupa (positive:sarcastic ≈ 81:1)
-- `RandomOverSampler` — klase `mixed` (252 → 750) i `sarcastic` (67 → 500) naduzorkovane su kako bi se poboljšao makro recall
-- Metrike se računaju u dva oblika: **ponderirani prosjek** (weighted — ponderiran brojem primjera po klasi) i **makro prosjek** (macro — sve klase jednako ponderirane)
-
 #### Ponderirani prosjek (weighted)
 
 | Test | Model | Accuracy | Precision | Recall | F1 |
@@ -35,9 +26,9 @@ Optimizacije:
 | test-4 | Linear SVM          | 0,7210 | 0,3704 | 0,3854 | 0,3755 |
 | test-4 | KNN (k=7, cosine)   | 0,6957 | 0,3932 | 0,3605 | 0,3664 |
 
-### Matrice konfuzije (TRAIN-1234, optimizirani parametri)
+### Matrice zabune 
 
-U svim matricama redovi su stvarne klase, a stupci predviđene klase.
+U svim matricama redovi su stvarne oznake, a stupci predviđene oznake.
 
 #### test-1 — Linear SVM
 
