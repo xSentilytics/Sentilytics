@@ -78,7 +78,7 @@ Anotacija je provedena pojedinačno, pri čemu je svaki član grupe samostalno o
  
 # Anotiranje korpusa
  
-Nakon pilot-faze cjelokupni je korpus označen istom 5-stupanjskom ljestvicom (`negative`, `neutral`, `positive`, `mixed`, `sarcastic`). Anotaciju je provelo nekoliko članova grupe, neovisno jedni o drugima, dok je preostali član imao ulogu *data curator*, odnosno osobe koja samostalno odlučuje o konačnoj oznaci u slučajevima u kojima se anotatori nisu složili. Tako svaka rečenica dobiva jedinstvenu, dogovorenu oznaku.
+Nakon pilot-faze cjelokupni je korpus označen istom 5-stupanjskom ljestvicom (`negative`, `neutral`, `positive`, `mixed`, `sarcastic`). Anotaciju je provelo nekoliko članova grupe, neovisno jedni o drugima, dok je preostali član imao ulogu *data curatora*, odnosno osobe koja samostalno odlučuje o konačnoj oznaci u slučajevima u kojima se anotatori nisu složili. Tako svaka rečenica dobiva jedinstvenu, dogovorenu oznaku.
 
 Konačni smo korpus dobili objedinjivanjem rada četiriju timova i podijelili ga na **trening skup** (engl. *training set*) `TRAIN-1234.csv`, **validacijski skup** (engl. *validation set*) `validation-1.csv` (naš validacijski skup) i četiri **testna skupa** (engl. *test sets*) `test-1.csv` … `test-4.csv`. Trening skup sadrži 9 958 rečenica.
  
