@@ -161,15 +161,16 @@ Modeli se treniraju isključivo na kombiniranom trening skupu **TRAIN-1234**. Ka
 ## Arhitekture
  
 ### TextCNN
-**Embedding sloj** (engl. *embedding layer*) inicijaliziran fastText vektorima dimenzije 300, koji se dotrenira tijekom učenja
-Paralelni **konvolucijski slojevi** (engl. *convolutional layers*) s veličinama jezgre 3, 4 i 5; po 128 filtera za svaku veličinu
-**Global max-pooling** preko vremenske dimenzije za svaku jezgru
-**Dropout** 0,5 i potpuno povezani izlazni sloj na 5 oznaka
+**Embedding sloj** (engl. *embedding layer*) inicijaliziran fastText vektorima dimenzije 300, koji se dotrenira tijekom učenja.
+Paralelni **konvolucijski slojevi** (engl. *convolutional layers*) s veličinama jezgre 3, 4 i 5; po 128 filtera za svaku veličinu.
+**Global max-pooling** preko vremenske dimenzije za svaku jezgru.
+**Dropout** 0,5 i potpuno povezani izlazni sloj na 5 oznaka.
+
 ### BiLSTM
-Isti **embedding sloj** s fastText inicijalizacijom i `nn.Dropout1d(0.3)` kao **spatial dropout**
-**BiLSTM sloj** s 64 skrivenih neurona po smjeru (ukupno 128 dimenzija na izlazu)
-Predikcija se temelji na **konkatenaciji posljednjih skrivenih stanja** oba smjera
-**Dropout** 0,5 i potpuno povezani izlazni sloj na 5 oznaka
+Isti **embedding sloj** s fastText inicijalizacijom i `nn.Dropout1d(0.3)` kao **spatial dropout**.
+**BiLSTM sloj** s 64 skrivenih neurona po smjeru (ukupno 128 dimenzija na izlazu).
+Predikcija se temelji na **konkatenaciji posljednjih skrivenih stanja** oba smjera.
+**Dropout** 0,5 i potpuno povezani izlazni sloj na 5 oznaka.
 
 ## Treniranje
  
@@ -208,7 +209,7 @@ U trećoj smo fazi koristili **transformer modele** (engl. *transformer models*)
 **mBERT** ([`bert-base-multilingual-cased`](https://huggingface.co/bert-base-multilingual-cased)) je Googleov izvorni **višejezični BERT** treniran s wikipedija člancima na 104 jezika. Služi kao opći referentni model. Dobar je za mnoge jezike, ali nije specijaliziran za hrvatski.
  
 ### EuroLLM-1.7B-Instruct
-**EuroLLM-1.7B-Instruct** ([`utter-project/EuroLLM-1.7B-Instruct`](https://huggingface.co/utter-project/EuroLLM-1.7B-Instruct)) je **generativni veliki jezični model** (engl. *Large Language Model*, LLM) iz obitelji EuroLLM, osmišljen posebno za europske jezike (uključujući hrvatski). Sa 1,7 milijardi parametara model je znatno veći od BERTića (~110 M). Umjesto klasične klasifikacije koristi se **instrukcijsko podešavanje** (engl. *instruction fine-tuning*, IFT) putem **LoRA-adaptera** (engl. *Low-Rank Adaptation*) iz biblioteke **PEFT**.Treniraju se samo matrice adaptera, dok temeljni model ostaje zamrznut, što drastično smanjuje memorijske zahtjeve.
+**EuroLLM-1.7B-Instruct** ([`utter-project/EuroLLM-1.7B-Instruct`](https://huggingface.co/utter-project/EuroLLM-1.7B-Instruct)) je **generativni veliki jezični model** (engl. *Large Language Model*, LLM) iz obitelji EuroLLM, osmišljen posebno za europske jezike (uključujući hrvatski). Sa 1,7 milijardi parametara model je znatno veći od BERTića (~110 M). Umjesto klasične klasifikacije koristi se **instrukcijsko podešavanje** (engl. *instruction fine-tuning*, IFT) putem **LoRA-adaptera** (engl. *Low-Rank Adaptation*) iz biblioteke **PEFT**. Treniraju se samo matrice adaptera, dok temeljni model ostaje zamrznut, što drastično smanjuje memorijske zahtjeve.
  
 ## Treniranje
  
