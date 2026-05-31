@@ -139,7 +139,8 @@ Za svaku kombinaciju (testni skup, model) program računa četiri **metrike**:
 
 Svaka metrika računa se u dvije inačice:
 **ponderirani prosjek**: svaka je oznaka ponderirana brojem primjera
-**makro prosjek**: sve su oznake ponderirane jednako, neovisno o broju primjera
+**makro prosjek**: sve su oznake ponderirane jednako, neovisno o broju primjera.
+
 Istrenirani modeli spremaju se u direktorij skripte kao `.joblib` datoteke (`svm_model.joblib` i `knn_model.joblib`). Svaka spremljena datoteka sadrži ne samo model nego i naučeni TF-IDF vektorizator, popis oznaka te oznaku tipa modela, što je dovoljno za kasniju **inferenciju** bez ponovnog treniranja modela ili učenja vektorizatora.
  
 Rezultati se ispisuju u terminal i spremaju u datoteku `results_ml.csv` u direktoriju skripte. Tablice s rezultatima i kvalitativnom analizom nalaze se u datoteci `results_ml.md`.
