@@ -7,6 +7,8 @@ Na projektu sudjeluju:
 4. Toni Pernar
 5. Nikola Gamulin
 
+---
+
 ## Sadržaj
  
 1. [Opis projekta](#opis-projekta)
@@ -22,7 +24,7 @@ Na projektu sudjeluju:
  
 # Opis projekta
  
-Projekt je izrađen u sklopu kolegija **Obrada prirodnog jezika** (engl. *Natural Language Processing*, NLP), a bavi se **analizom sentimenta** (engl. *sentiment analysis*) tekstualnih komentara.
+Projekt je izrađen u sklopu kolegija **Obrada prirodnog jezika**, a bavi se **analizom sentimenta** (engl. *sentiment analysis*) tekstualnih komentara.
 Cilj je projekta prikupiti komentare s mrežnih stranica, obraditi ih i pripremiti za daljnju analizu sentimenta.
 Za prikupljanje podataka koristi se portal [najdoktor.com](https://najdoktor.com). Riječ je o mrežnoj stranici na kojoj pacijenti mogu ocjenjivati liječnike i stomatologe u Hrvatskoj te im ostavljati komentare.
 Komentari na profilima doktora tekstualne su recenzije koje mogu sadržavati pozitivna, negativna ili neutralna mišljenja pacijenata, što ih čini pogodnima za zadatke analize sentimenta.
@@ -269,6 +271,8 @@ Više vidljivih pogrešaka u kvalitativnoj analizi može se izravno pripisati sv
 ## Zaključak
  
 Ovaj projekt potvrđuje da je za morfološki bogate jezike s ograničenom količinom anotiranih podataka, kao što je hrvatski, najučinkovitiji pristup **fino podešavanje jednojezičnog transformerskog modela predtreniranog na ciljnome jeziku** (BERTić). Generativni je LLM (EuroLLM) vrlo blizu po točnosti, ali zahtijeva bolje oblikovanje uputa ili više primjera manjinskih oznaka kako bi obuhvatio cijelu ljestvicu sentimenta. Klasično strojno učenje s pametno odabranim značajkama (TF-IDF na razini riječi i znakova + naduzorkovanje) ostaje konkurentno i jeftino, a duboko učenje bez transfernog učenja slabija je opcija za skupove reda veličine 10 tisuća primjera.
+
+---
 
 # Zahvale 
 
