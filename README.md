@@ -36,11 +36,11 @@ Komentari na profilima doktora tekstualne su recenzije koje mogu sadržavati poz
 U sklopu projekta razvili smo program u Pythonu koji automatski prikuplja komentare s profila doktora na portalu [najdoktor.com](https://najdoktor.com). Program se koristi bibliotekom **Selenium**, kojom upravlja mrežnim preglednikom i dohvaća komentare sa zadane stranice.
 Tijekom izvođenja program:
  
-1. učitava datoteku `doktori.py` s rječnikom doktora i URL-ova njihovih profila
-2. otvara URL profila doktora
-3. pokušava zatvoriti prozor za prihvaćanje kolačića
-4. automatski klika na gumb za učitavanje dodatnih komentara dok god je dostupan
-5. prikuplja tekst svih komentara sa stranice
+1. učitava datoteku `doktori.py` s rječnikom doktora i URL-ova njihovih profila.
+2. otvara URL profila doktora.
+3. pokušava zatvoriti prozor za prihvaćanje kolačića.
+4. automatski klika na gumb za učitavanje dodatnih komentara dok god je dostupan.
+5. prikuplja tekst svih komentara sa stranice.
 Prikupljeni tekst komentara zatim se **tokenizira u rečenice** pomoću biblioteke **CLASSLA**. Program se koristi modelom treniranim za hrvatski *nestandardni* jezik kako bi pravilno prepoznao granice rečenica.
 Svaka se rečenica zatim sprema u zaseban red **.xlsx datoteke** pomoću biblioteke **openpyxl**, što omogućuje jednostavniju daljnju obradu.
  
@@ -56,9 +56,9 @@ Prilikom pokretanja programa korisnik mora unijeti **naziv .xlsx datoteke** u ko
  
 Program zatim:
  
-1. prikuplja komentare sa stranice
-2. razdvaja tekst na rečenice
-3. sprema rečenice u .xlsx datoteku
+1. prikuplja komentare sa stranice.
+2. razdvaja tekst na rečenice.
+3. sprema rečenice u .xlsx datoteku.
  
 ---
  
