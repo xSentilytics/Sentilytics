@@ -27,7 +27,7 @@ Na projektu sudjeluju:
 Projekt je izrađen u sklopu kolegija **Obrada prirodnog jezika**, a bavi se **analizom sentimenta** (engl. *sentiment analysis*) tekstualnih komentara.
 Cilj je projekta prikupiti komentare s mrežnih stranica, obraditi ih i pripremiti za daljnju analizu sentimenta.
 Za prikupljanje podataka koristi se portal [najdoktor.com](https://najdoktor.com). Riječ je o mrežnoj stranici na kojoj pacijenti mogu ocjenjivati liječnike i stomatologe u Hrvatskoj te im ostavljati komentare.
-Komentari na profilima doktora tekstualne su recenzije koje mogu sadržavati pozitivna, negativna ili neutralna mišljenja pacijenata, što ih čini pogodnima za zadatke analize sentimenta.
+Komentari na profilima doktora tekstualne su recenzije koje mogu sadržavati pozitivna, negativna, neutralna, sarkastična ili mješovita mišljenja pacijenata, što ih čini pogodnima za zadatke analize sentimenta.
  
 ---
  
