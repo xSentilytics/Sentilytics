@@ -140,8 +140,9 @@ Za svaku kombinaciju (testni skup, model) program računa četiri **metrike**:
 4. **F1-mjera** – harmonijska sredina preciznosti i odziva
 
 Svaka metrika računa se u dvije inačice:
-**ponderirani prosjek**: svaka je oznaka ponderirana brojem primjera
-**makro prosjek**: sve su oznake ponderirane jednako, neovisno o broju primjera.
+
+1. **ponderirani prosjek**: svaka je oznaka ponderirana brojem primjera.
+2. **makro prosjek**: sve su oznake ponderirane jednako, neovisno o broju primjera.
 
 Istrenirani modeli spremaju se u direktorij skripte kao `.joblib` datoteke (`svm_model.joblib` i `knn_model.joblib`). Svaka spremljena datoteka sadrži ne samo model nego i naučeni TF-IDF vektorizator, popis oznaka te oznaku tipa modela, što je dovoljno za kasniju **inferenciju** bez ponovnog treniranja modela ili učenja vektorizatora.
  
