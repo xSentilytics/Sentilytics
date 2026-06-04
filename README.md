@@ -177,7 +177,7 @@ Predikcija se temelji na **konkatenaciji posljednjih skrivenih stanja** oba smje
 
 ## Treniranje
  
-Pri treniranju koristimo **ponderiranu unakrsnu entropiju** (engl. *class-weighted cross-entropy loss*) izračunat iz inverza frekvencije oznaka, **Adam optimizator** s početnom stopom učenja `1e-3`, mini-grupe veličine 32 i rano zaustavljanje s `patience=3` na validacijskom gubitku.
+Pri treniranju koristimo **ponderiranu unakrsnu entropiju** (engl. *class-weighted cross-entropy loss*) izračunatu iz inverza frekvencije oznaka, **Adam optimizator** s početnom stopom učenja `1e-3`, mini-grupe veličine 32 i rano zaustavljanje s `patience=3` na validacijskom gubitku.
  
 Pipeline je podijeljen na sljedeće module:
  
